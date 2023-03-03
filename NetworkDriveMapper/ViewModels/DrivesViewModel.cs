@@ -36,20 +36,20 @@ public partial class DrivesViewModel : BaseViewModel
             foreach (var drive in drives)
                 Drives.Add(drive);
 
-            if (OperatingSystem.IsWindows())
-            {
-                foreach (var drive in drives)
-                {
-                    Process.Start($"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no");
-                }
-            }
-            else if (OperatingSystem.IsMacOS())
-            {
-                foreach (var drive in drives)
-                {
-                    Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
-                }
-            }
+            //if (OperatingSystem.IsWindows())
+            //{
+            //    foreach (var drive in drives)
+            //    {
+            //        Process.Start($"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no");
+            //    }
+            //}
+            //else if (OperatingSystem.IsMacOS())
+            //{
+            //    foreach (var drive in drives)
+            //    {
+            //        Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
+            //    }
+            //}
         }
         catch (Exception ex)
         {
@@ -62,19 +62,6 @@ public partial class DrivesViewModel : BaseViewModel
             IsBusy = false;
             IsRefreshing = false;
         }
-    }
-
-    [RelayCommand]
-    private async Task GoToDetailsAsync(DriveModel drive)
-    {
-        if (drive is null)
-            return;
-
-        await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
-            new Dictionary<string, object>
-            {
-                { "Drive", drive }
-            });
     }
 
     /// <summary>
@@ -99,5 +86,24 @@ public partial class DrivesViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!",
                 $"Unable to map drives: {ex.Message}", "OK");
         }
+    }
+
+    [RelayCommand]
+    private async Task GoToDetailsAsync(DriveModel drive)
+    {
+        if (drive is null)
+            return;
+
+        await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
+            new Dictionary<string, object>
+            {
+                { "Drive", drive }
+            });
+    }
+
+    [RelayCommand]
+    private async Task GoToAddDriveAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
     }
 }

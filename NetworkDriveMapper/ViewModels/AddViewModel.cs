@@ -11,7 +11,20 @@ public partial class AddViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    private DriveModel _drive;
+    private string _letter;
+
+    [ObservableProperty]
+    private string _address;
+
+    [ObservableProperty]
+    private string _driveName;
+
+    [ObservableProperty]
+    private string _password;
+
+    [ObservableProperty]
+    private string _userName;
+
 
     [RelayCommand]
     private async Task AddDriveAsync()
@@ -20,20 +33,24 @@ public partial class AddViewModel : BaseViewModel
         {
             var response = await _driveService.AddDrive(new DriveModel
             {
-                Letter = Drive.Letter,
-                Address = Drive.Address,
-                DriveName = Drive.DriveName,
-                Password = Drive.Password,
-                UserName = Drive.UserName
+                Letter = Letter,
+                Address = Address,
+                DriveName = DriveName,
+                Password = Password,
+                UserName = UserName
             });
 
             if (response > 0)
                 await Shell.Current.DisplayAlert("Drive Added!",
-                    $"The drive {Drive.DriveName} hasb enn added", "OK", "").ContinueWith(async (result) =>
+                    $"The drive {DriveName} hasb enn added", "OK", "Cancel").ContinueWith(async (result) =>
                     {
                         if (result.Result)
                         {
                             await Shell.Current.GoToAsync($"{nameof(MainPage)}", true);
+                        }
+                        else
+                        {
+
                         }
                     });
         }

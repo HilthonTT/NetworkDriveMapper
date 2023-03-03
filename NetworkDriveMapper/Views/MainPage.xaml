@@ -9,4 +9,91 @@
              Title="{Binding Title}"
              x:Class="NetworkDriveMapper.MainPage">
 
+    <Grid ColumnDefinitions="*, *"
+          ColumnSpacing="5"
+          RowDefinitions="*, Auto"
+          RowSpacing="0"
+          Padding="10">
+
+        <RefreshView Grid.ColumnSpan="2"
+                     Command="{Binding GetDrivesCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
+            <CollectionView BackgroundColor="Transparent"
+                            ItemsSource="{Binding Drives}"
+                            SelectionMode="None">
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 WidthRequest="200"
+                                 HeightRequest="200">
+
+                        <Image Source="nodata.png"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Aspect="AspectFill" />
+
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="{OnIdiom Desktop=1, Default=3}" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:DriveModel">
+                        <Grid Padding="10">
+                            <Frame HeightRequest="125"
+                                   WidthRequest="500"
+                                   Padding="10"
+                                   Style="{StaticResource CardView}">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer CommandParameter="{Binding .}"
+                                                          Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=GoToDetailsCommand}"/>
+                                </Frame.GestureRecognizers>
+                                <Grid Padding="0"
+                                      ColumnDefinitions="125, *">
+
+                                    <FlexLayout>
+                                        <Frame WidthRequest="100"
+                                               HeightRequest="100"
+                                               CornerRadius="90">
+                                            <Label Text="{Binding Letter}"
+                                                   Style="{StaticResource XXLLabel}"
+                                                   HorizontalOptions="Center"
+                                                   VerticalOptions="Center"/>
+                                        </Frame>
+                                    </FlexLayout>
+                                    
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Padding="10"
+                                                         VerticalOptions="Center">
+                                        <Label Text="{Binding DriveName}"
+                                               Style="{StaticResource LargeLabel}"/>
+                                        <Label Text="{Binding UserName}"
+                                               Style="{StaticResource MediumLabel}"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <Button Text="Connect Drives"
+                Style="{StaticResource ButtonOutline}"
+                Command="{Binding ConnectAllDrivesCommand}" 
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="8"/>
+
+        <Button Text="Add a drive"
+                Style="{StaticResource ButtonOutline}"
+                Command="{Binding GoToAddDriveCommand}" 
+                IsEnabled="{Binding IsNotBusy}"
+                Grid.Row="1"
+                Margin="8"/>
+
+    </Grid>
+
 </ContentPage>
