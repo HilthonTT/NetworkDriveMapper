@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using NetworkDriveMapper.Services;
 using NetworkDriveMapper.View;
 using NetworkDriveMapper.ViewModel;
 
@@ -20,12 +21,20 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+        // Services
+        builder.Services.AddSingleton<IDriveService, DriveService>();
 
+        // View Models
         builder.Services.AddSingleton<DrivesViewModel>();
-        builder.Services.AddTransient<DriveDetailsViewModel>();
+        builder.Services.AddTransient<DetailsViewModel>();
+        builder.Services.AddTransient<AddViewModel>();
+        builder.Services.AddTransient<UpdateViewModel>();
 
+        // Views Registration
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<DetailsPage>();
+        builder.Services.AddTransient<AddDrivePage>();
+        builder.Services.AddTransient<UpdatePage>();
 
         return builder.Build();
     }

@@ -4,9 +4,11 @@
              xmlns:model="clr-namespace:NetworkDriveMapper.Model"
              xmlns:viewModel="clr-namespace:NetworkDriveMapper.ViewModel"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             x:DataType="viewModel:DetailsViewModel"
-             Title="{Binding Title}"
+             x:DataType="viewModel:UpdateViewModel"
              ios:Page.UseSafeArea="True"
-             x:Class="NetworkDriveMapper.View.DetailsPage">
+             Title="{Binding Drive.DriveName}"
+             x:Class="NetworkDriveMapper.View.UpdatePage">
+    
+    
 
 </ContentPage>

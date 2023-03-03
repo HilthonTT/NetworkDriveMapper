@@ -1,8 +1,8 @@
 namespace NetworkDriveMapper.View;
 
-public partial class DetailsPage : ContentPage
+public partial class AddDrivePage : ContentPage
 {
-	public DetailsPage(DetailsViewModel viewModel)
+	public AddDrivePage(AddViewModel viewModel)
 	{
 		InitializeComponent();
 		BindingContext = viewModel;

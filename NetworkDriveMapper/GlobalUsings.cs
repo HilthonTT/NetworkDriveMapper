@@ -2,6 +2,7 @@
 global using CommunityToolkit.Mvvm.Input;
 global using NetworkDriveMapper.Model;
 global using NetworkDriveMapper.ViewModel;
+global using NetworkDriveMapper.View;
 global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Diagnostics;

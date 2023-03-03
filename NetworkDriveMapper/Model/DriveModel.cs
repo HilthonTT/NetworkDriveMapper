@@ -1,7 +1,10 @@
-﻿namespace NetworkDriveMapper.Model;
+﻿using SQLite;
+
+namespace NetworkDriveMapper.Model;
 
 public class DriveModel
 {
+    [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public string Letter { get; set; }
     public string Address { get; set; }

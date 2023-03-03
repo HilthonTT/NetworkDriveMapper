@@ -4,9 +4,9 @@
              xmlns:model="clr-namespace:NetworkDriveMapper.Model"
              xmlns:viewModel="clr-namespace:NetworkDriveMapper.ViewModel"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             x:DataType="viewModel:DetailsViewModel"
+             x:DataType="viewModel:AddViewModel"
              Title="{Binding Title}"
              ios:Page.UseSafeArea="True"
-             x:Class="NetworkDriveMapper.View.DetailsPage">
+             x:Class="NetworkDriveMapper.View.AddDrivePage">
 
 </ContentPage>

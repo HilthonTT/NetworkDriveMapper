@@ -1,24 +1,19 @@
-﻿namespace NetworkDriveMapper
+﻿namespace NetworkDriveMapper;
+
+public partial class MainPage : ContentPage
 {
-    public partial class MainPage : ContentPage
+    private readonly DrivesViewModel _viewModel;
+
+    public MainPage(DrivesViewModel viewModel)
     {
-        int count = 0;
+        InitializeComponent();
+        BindingContext = viewModel;
+        _viewModel = viewModel;
+    }
 
-        public MainPage()
-        {
-            InitializeComponent();
-        }
-
-        private void OnCounterClicked(object sender, EventArgs e)
-        {
-            count++;
-
-            if (count == 1)
-                CounterBtn.Text = $"Clicked {count} time";
-            else
-                CounterBtn.Text = $"Clicked {count} times";
-
-            SemanticScreenReader.Announce(CounterBtn.Text);
-        }
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        _viewModel.GetDrivesCommand.Execute(this);
     }
 }
