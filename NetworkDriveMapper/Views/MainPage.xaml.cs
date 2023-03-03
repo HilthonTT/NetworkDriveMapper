@@ -7,13 +7,12 @@ public partial class MainPage : ContentPage
     public MainPage(DrivesViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
         _viewModel = viewModel;
+        BindingContext = viewModel;
     }
 
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.GetDrivesCommand.Execute(this);
     }
 }

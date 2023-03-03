@@ -1,4 +1,4 @@
-namespace NetworkDriveMapper.View;
+namespace NetworkDriveMapper.Views;
 
 public partial class DetailsPage : ContentPage
 {

@@ -1,7 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using NetworkDriveMapper.Services;
-using NetworkDriveMapper.View;
-using NetworkDriveMapper.ViewModel;
 
 namespace NetworkDriveMapper;
 
@@ -21,6 +18,7 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
         // Services
         builder.Services.AddSingleton<IDriveService, DriveService>();
 

@@ -1,8 +1,9 @@
 ﻿global using CommunityToolkit.Mvvm.ComponentModel;
 global using CommunityToolkit.Mvvm.Input;
-global using NetworkDriveMapper.Model;
-global using NetworkDriveMapper.ViewModel;
-global using NetworkDriveMapper.View;
+global using NetworkDriveMapper.Models;
+global using NetworkDriveMapper.ViewModels;
+global using NetworkDriveMapper.Views;
+global using NetworkDriveMapper.Services;
 global using System.Collections.ObjectModel;
 global using System.ComponentModel;
 global using System.Diagnostics;

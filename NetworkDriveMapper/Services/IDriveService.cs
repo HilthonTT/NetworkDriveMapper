@@ -1,10 +1,9 @@
-﻿namespace NetworkDriveMapper.Services
+﻿namespace NetworkDriveMapper.Services;
+
+public interface IDriveService
 {
-    public interface IDriveService
-    {
-        Task<int> AddDrive(DriveModel drive);
-        Task<int> DeleteDrive(DriveModel drive);
-        Task<List<DriveModel>> GetDriveList();
-        Task<int> UpdateDrive(DriveModel drive);
-    }
+    Task<int> AddDrive(DriveModel drive);
+    Task<int> DeleteDrive(DriveModel drive);
+    Task<List<DriveModel>> GetDriveList();
+    Task<int> UpdateDrive(DriveModel drive);
 }

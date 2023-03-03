@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:NetworkDriveMapper"
     Shell.FlyoutBehavior="Disabled">
 
-
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">

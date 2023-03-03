@@ -1,14 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:model="clr-namespace:NetworkDriveMapper.Model"
-             xmlns:viewModel="clr-namespace:NetworkDriveMapper.ViewModel"
+             xmlns:models="clr-namespace:NetworkDriveMapper.Models"
+             xmlns:viewModels="clr-namespace:NetworkDriveMapper.ViewModels"
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
-             x:DataType="viewModel:DrivesViewModel"
-             Title="{Binding Title}"
+             x:DataType="viewModels:DrivesViewModel"
              ios:Page.UseSafeArea="True"
+             Title="{Binding Title}"
              x:Class="NetworkDriveMapper.MainPage">
-
-    
 
 </ContentPage>

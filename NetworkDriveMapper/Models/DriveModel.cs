@@ -1,6 +1,6 @@
 ﻿using SQLite;
 
-namespace NetworkDriveMapper.Model;
+namespace NetworkDriveMapper.Models;
 
 public class DriveModel
 {

@@ -74,6 +74,7 @@
                 <Setter Property="CornerRadius" Value="10" />
                 <Setter Property="IsClippedToBounds" Value="True" />
             </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,9 +1,9 @@
-﻿namespace NetworkDriveMapper.ViewModel;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class BaseViewModel : ObservableObject
 {
     public BaseViewModel()
-    {    
+    {
     }
 
     [ObservableProperty]

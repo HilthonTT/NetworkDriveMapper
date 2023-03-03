@@ -1,6 +1,4 @@
-﻿using NetworkDriveMapper.Services;
-
-namespace NetworkDriveMapper.ViewModel;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class UpdateViewModel : BaseViewModel
 {

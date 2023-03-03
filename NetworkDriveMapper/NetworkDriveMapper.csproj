@@ -16,7 +16,7 @@
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.networkdrivemapper</ApplicationId>
-		<ApplicationIdGuid>6ca9f012-54af-4f8c-93d9-2898c06b55d3</ApplicationIdGuid>
+		<ApplicationIdGuid>a827cd53-ffe1-4b82-b75a-a01bec97e1e6</ApplicationIdGuid>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -59,13 +59,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="View\AddDrivePage.xaml">
+	  <MauiXaml Update="Views\AddDrivePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\DetailsPage.xaml">
+	  <MauiXaml Update="Views\DetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="View\UpdatePage.xaml">
+	  <MauiXaml Update="Views\UpdatePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

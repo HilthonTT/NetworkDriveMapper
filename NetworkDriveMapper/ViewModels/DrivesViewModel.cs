@@ -1,6 +1,4 @@
-﻿using NetworkDriveMapper.Services;
-
-namespace NetworkDriveMapper.ViewModel;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class DrivesViewModel : BaseViewModel
 {
@@ -35,7 +33,7 @@ public partial class DrivesViewModel : BaseViewModel
             if (Drives.Count != 0)
                 Drives.Clear();
 
-            foreach(var drive in drives)
+            foreach (var drive in drives)
                 Drives.Add(drive);
 
             if (OperatingSystem.IsWindows())
@@ -84,7 +82,7 @@ public partial class DrivesViewModel : BaseViewModel
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
-    private async Task ConnectAllDrives()
+    private async Task ConnectAllDrivesAsync()
     {
         try
         {
@@ -93,7 +91,7 @@ public partial class DrivesViewModel : BaseViewModel
                     foreach (var drive in Drives)
                         Process.Start($"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no");
                 else if (OperatingSystem.IsMacOS())
-                    foreach(var drive in Drives)
+                    foreach (var drive in Drives)
                         Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
         }
         catch (Exception ex)

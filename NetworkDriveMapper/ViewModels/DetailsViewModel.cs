@@ -1,6 +1,4 @@
-﻿using NetworkDriveMapper.Services;
-
-namespace NetworkDriveMapper.ViewModel;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class DetailsViewModel : BaseViewModel
 {
@@ -8,7 +6,7 @@ public partial class DetailsViewModel : BaseViewModel
     public DetailsViewModel(IDriveService driveService)
     {
         _driveService = driveService;
-    } 
+    }
 
     [RelayCommand]
     private async Task DisplayActionAsync(DriveModel drive)

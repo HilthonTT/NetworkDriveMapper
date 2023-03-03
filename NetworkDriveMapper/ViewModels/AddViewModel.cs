@@ -1,6 +1,4 @@
-﻿using NetworkDriveMapper.Services;
-
-namespace NetworkDriveMapper.ViewModel;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class AddViewModel : BaseViewModel
 {
@@ -13,7 +11,7 @@ public partial class AddViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    private readonly DriveModel _drive;
+    private DriveModel _drive;
 
     [RelayCommand]
     private async Task AddDriveAsync()
