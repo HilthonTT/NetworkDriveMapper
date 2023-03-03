@@ -1,5 +1,6 @@
 ﻿namespace NetworkDriveMapper.ViewModels;
 
+[QueryProperty("Drive", "Drive")]
 public partial class DetailsViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
@@ -8,6 +9,10 @@ public partial class DetailsViewModel : BaseViewModel
         _driveService = driveService;
     }
 
+    [ObservableProperty]
+    private DriveModel _drive;
+
+
     [RelayCommand]
     private async Task DisplayActionAsync(DriveModel drive)
     {
@@ -15,7 +20,7 @@ public partial class DetailsViewModel : BaseViewModel
 
         if (response == "Update")
         {
-            await Shell.Current.GoToAsync(nameof(DetailsPage), true,
+            await Shell.Current.GoToAsync(nameof(UpdatePage), true,
                 new Dictionary<string, object>
                 {
                      { "Drive", drive }

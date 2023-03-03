@@ -30,14 +30,14 @@ public partial class DrivesViewModel : BaseViewModel
         {
             List<Task<Process>> processes = new();
 
-            Process process = new();
-            ProcessStartInfo startInfo = new()
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                CreateNoWindow = true,
-                UseShellExecute = false
-            };
+            //Process process = new();
+            //ProcessStartInfo startInfo = new()
+            //{
+            //    WindowStyle = ProcessWindowStyle.Hidden,
+            //    FileName = "cmd.exe",
+            //    CreateNoWindow = true,
+            //    UseShellExecute = false
+            //};
 
             IsBusy = true;
 
@@ -53,8 +53,25 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    startInfo.Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no";
+                    Process process = new();
+                    ProcessStartInfo startInfo = new()
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        CreateNoWindow = true,
+                        UseShellExecute = false,
+                        Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no"
+                    };
                     process.StartInfo = startInfo;
+                    process.WaitForExit();
+
+                    if (process.HasExited)
+                    {
+                        if (process.ExitCode is not 0)
+                            await Shell.Current.DisplayAlert("Error!",
+                                $"There was an error when mapping {drive.DriveName}.", "OK");
+                    }
+
                     processes.Add(Task.Run(() => Process.Start(startInfo)));
                     await Task.WhenAll(processes).ConfigureAwait(false);
                 }
@@ -63,9 +80,23 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
+                    Process process = new();
+                    ProcessStartInfo startInfo = new()
+                    {
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        FileName = "cmd.exe",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    };
+
                     Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
                     startInfo.Arguments = $"sudo -t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
                     process.StartInfo = startInfo;
+
+                    //if (process.ExitCode is not 0)
+                    //    await Shell.Current.DisplayAlert("Error!",
+                    //        $"There was an error when mapping {drive.DriveName}.", "OK");
+
                     processes.Add(Task.Run(() => Process.Start(startInfo)));
                     await Task.WhenAll(processes).ConfigureAwait(false);
                 }

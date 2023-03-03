@@ -7,9 +7,60 @@
              xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
              x:DataType="viewModels:DetailsViewModel"
              ios:Page.UseSafeArea="True"
-             Title="{Binding Title}">
+             Title="{Binding Drive.DriveName}">
 
-    
-    
-    
+    <ScrollView>
+        <VerticalStackLayout>
+            <Grid ColumnDefinitions="*, Auto, *"
+                  RowDefinitions="160, Auto">
+
+                <BoxView Color="{StaticResource Primary}"
+                         Grid.ColumnSpan="3"
+                         HeightRequest="160"
+                         HorizontalOptions="FillAndExpand" />
+
+                <Frame Grid.RowSpan="2"
+                       Grid.Column="1"
+                       HeightRequest="160"
+                       CornerRadius="80"
+                       HorizontalOptions="Center"
+                       Padding="0"
+                       Margin="0, 80, 0, 0"
+                       BackgroundColor="#121212">
+
+                    <FlexLayout HeightRequest="160"
+                                WidthRequest="160">
+
+                            <Label Text="{Binding Drive.Letter}"
+                                   Style="{StaticResource XXLLabel}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   Margin="32, 0, 0, 0"/>
+
+                    </FlexLayout>
+                </Frame>
+            </Grid>
+
+            <VerticalStackLayout Padding="10" Spacing="10">
+
+                <Frame Style="{StaticResource CardView}"
+                       Padding="20"
+                       HeightRequest="160">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="{Binding Drive.DriveName, StringFormat='Drive Name: {0}'}"
+                               Style="{StaticResource LargeLabel}"
+                               HorizontalOptions="Center"/>
+                        <Label Text="{Binding Drive.Address, StringFormat='IP Address: {0}'}"
+                               Style="{StaticResource LargeLabel}"
+                               HorizontalOptions="Center"/>
+                        <Label Text="{Binding Drive.UserName, StringFormat='User Name: {0}'}"
+                               Style="{StaticResource LargeLabel}"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

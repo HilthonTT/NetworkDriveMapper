@@ -31,6 +31,18 @@ public partial class AddViewModel : BaseViewModel
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(Letter) ||
+                string.IsNullOrWhiteSpace(Address) ||
+                string.IsNullOrWhiteSpace(DriveName) ||
+                string.IsNullOrWhiteSpace(Password) ||
+                string.IsNullOrWhiteSpace(UserName))
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    "Unable to add drive: every field must be populated.", "OK");
+
+                return;
+            }
+
             var response = await _driveService.AddDrive(new DriveModel
             {
                 Letter = Letter,
