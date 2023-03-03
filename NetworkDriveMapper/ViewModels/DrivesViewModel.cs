@@ -1,4 +1,6 @@
-﻿namespace NetworkDriveMapper.ViewModels;
+﻿using System.Diagnostics;
+
+namespace NetworkDriveMapper.ViewModels;
 
 public partial class DrivesViewModel : BaseViewModel
 {
@@ -26,6 +28,17 @@ public partial class DrivesViewModel : BaseViewModel
 
         try
         {
+            List<Task<Process>> processes = new();
+
+            Process process = new();
+            ProcessStartInfo startInfo = new()
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                UseShellExecute = false
+            };
+
             IsBusy = true;
 
             var drives = await _driveService.GetDriveList();
@@ -36,20 +49,27 @@ public partial class DrivesViewModel : BaseViewModel
             foreach (var drive in drives)
                 Drives.Add(drive);
 
-            //if (OperatingSystem.IsWindows())
-            //{
-            //    foreach (var drive in drives)
-            //    {
-            //        Process.Start($"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no");
-            //    }
-            //}
-            //else if (OperatingSystem.IsMacOS())
-            //{
-            //    foreach (var drive in drives)
-            //    {
-            //        Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
-            //    }
-            //}
+            if (OperatingSystem.IsWindows())
+            {
+                foreach (var drive in Drives)
+                {
+                    startInfo.Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no";
+                    process.StartInfo = startInfo;
+                    processes.Add(Task.Run(() => Process.Start(startInfo)));
+                    await Task.WhenAll(processes).ConfigureAwait(false);
+                }
+            }
+            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+            {
+                foreach (var drive in Drives)
+                {
+                    Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
+                    startInfo.Arguments = $"sudo -t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
+                    process.StartInfo = startInfo;
+                    processes.Add(Task.Run(() => Process.Start(startInfo)));
+                    await Task.WhenAll(processes).ConfigureAwait(false);
+                }
+            }
         }
         catch (Exception ex)
         {
@@ -73,13 +93,41 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
+            List<Task<Process>> processes = new();
+
+            Process process = new();
+            ProcessStartInfo startInfo = new()
+            {
+                WindowStyle = ProcessWindowStyle.Hidden,
+                FileName = "cmd.exe",
+                CreateNoWindow = true,
+                UseShellExecute= false
+            };
+
             if (Drives?.Count > 0)
+            {
                 if (OperatingSystem.IsWindows())
+                {
                     foreach (var drive in Drives)
-                        Process.Start($"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no");
-                else if (OperatingSystem.IsMacOS())
+                    {
+                        startInfo.Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no";
+                        process.StartInfo = startInfo;
+                        processes.Add(Task.Run(() => Process.Start(startInfo)));
+                        await Task.WhenAll(processes).ConfigureAwait(false);
+                    }
+                }
+                else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+                {
                     foreach (var drive in Drives)
+                    {
                         Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
+                        startInfo.Arguments = $"sudo -t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
+                        process.StartInfo = startInfo;
+                        processes.Add(Task.Run(() => Process.Start(startInfo)));
+                        await Task.WhenAll(processes).ConfigureAwait(false);
+                    }
+                }
+            }
         }
         catch (Exception ex)
         {
