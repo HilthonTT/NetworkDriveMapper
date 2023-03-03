@@ -16,7 +16,7 @@
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.networkdrivemapper</ApplicationId>
-		<ApplicationIdGuid>1411ade9-8285-4c27-861d-60e53a44ac4a</ApplicationIdGuid>
+		<ApplicationIdGuid>6ca9f012-54af-4f8c-93d9-2898c06b55d3</ApplicationIdGuid>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -49,17 +49,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\NetworkDriveMapperLibrary\NetworkDriveMapperLibrary.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="DriveDB.db">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+	  <MauiXaml Update="View\DetailsPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 </Project>

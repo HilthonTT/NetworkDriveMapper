@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
-using NetworkDriveMapperLibrary.Internal.DataAccess;
+using NetworkDriveMapper.View;
+using NetworkDriveMapper.ViewModel;
 
 namespace NetworkDriveMapper;
 
@@ -16,13 +17,15 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddSingleton<ISqliteDataAccess, SqliteDataAccess>();
-
-        builder.Services.AddSingleton<MainPage>();
-
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+        builder.Services.AddSingleton<DrivesViewModel>();
+        builder.Services.AddTransient<DriveDetailsViewModel>();
+
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddTransient<DetailsPage>();
 
         return builder.Build();
     }

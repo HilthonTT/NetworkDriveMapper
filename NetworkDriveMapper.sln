@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkDriveMapper", "NetworkDriveMapper\NetworkDriveMapper.csproj", "{7E096B1C-B92C-4760-802B-60A513ECF806}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Desktop", "Desktop", "{865E6E62-18F7-42D1-A312-A7F439DD1A31}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkDriveMapperLibrary", "NetworkDriveMapperLibrary\NetworkDriveMapperLibrary.csproj", "{0C5175F5-004F-44C4-94D7-A26E02B21C0D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetworkDriveMapper", "NetworkDriveMapper\NetworkDriveMapper.csproj", "{D8790160-145F-4C7E-95D9-3F7C5F89688B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,23 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7E096B1C-B92C-4760-802B-60A513ECF806}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{0C5175F5-004F-44C4-94D7-A26E02B21C0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0C5175F5-004F-44C4-94D7-A26E02B21C0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0C5175F5-004F-44C4-94D7-A26E02B21C0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0C5175F5-004F-44C4-94D7-A26E02B21C0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8790160-145F-4C7E-95D9-3F7C5F89688B}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{7E096B1C-B92C-4760-802B-60A513ECF806} = {865E6E62-18F7-42D1-A312-A7F439DD1A31}
-		{0C5175F5-004F-44C4-94D7-A26E02B21C0D} = {865E6E62-18F7-42D1-A312-A7F439DD1A31}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F8C07317-D474-4B24-96E0-B1BEBB4EE471}
