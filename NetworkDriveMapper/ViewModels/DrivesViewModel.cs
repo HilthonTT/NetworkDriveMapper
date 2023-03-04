@@ -209,6 +209,77 @@ public partial class DrivesViewModel : BaseViewModel
         }
     }
 
+    [RelayCommand]
+    private async Task ConnectSingularDriveAsync(DriveModel drive)
+    {
+        try
+        {
+            DrivesConnected = 0;
+            DriveProgress = 0;
+            if (OperatingSystem.IsWindows())
+            {
+                await _netUseService.ConnectDriveAsync(drive);
+                if (drive.IsConnected)
+                {
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
+                    drive.ButtonColor = "#00FF00"; // Green
+                }
+            }
+            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+            {
+                await _netUseService.ConnectDriveMacOSAsync(drive);
+                if (drive.IsConnected)
+                {
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
+                    drive.ButtonColor = "#00FF00"; // Green
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error!",
+                $"Unable to connect drive: {ex.Message}", "OK");
+        }
+    }
+
+    [RelayCommand]
+    private async Task DisconnectSingularDriveAsync(DriveModel drive)
+    {
+        try
+        {
+            DrivesConnected = 0;
+            DriveProgress = 0;
+            DrivePercentage = 0;
+            if (OperatingSystem.IsWindows())
+            {
+                await _netUseService.DisconnectDrivesAsync(drive);
+                if (drive.IsConnected)
+                {
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
+                    drive.ButtonColor = "#FF0000"; // Red
+                }
+            }
+            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+            {
+                await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                if (drive.IsConnected)
+                {
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
+                    drive.ButtonColor = "#FF0000"; // Red
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error!",
+                    $"Unable to disconnect drive: {ex.Message}", "OK");
+        }
+    }
+
     /// <summary>
     /// Views the detail of the drives, IP Address, Drive Letter, userName.
     /// </summary>

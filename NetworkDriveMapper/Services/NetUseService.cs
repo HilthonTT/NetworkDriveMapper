@@ -103,8 +103,18 @@ public class NetUseService : INetUseService
         if (process.ExitCode is not 0)
         {
             // Handle the case where the command failed
-            await Shell.Current.DisplayAlert("Error!",
-                $"Failed to unmap {drive.Letter} with error code {process.ExitCode}: {errorMessage}", "OK");
+            if (errorMessage.Contains("The network connection could not be found."))
+            {
+                await Shell.Current.DisplayAlert("Warning!",
+                    $"Drive {drive.Letter} is already unmapped.", "OK");
+                drive.IsConnected = false;
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
+                drive.IsConnected = false;
+            }
         }
     }
 
@@ -129,8 +139,18 @@ public class NetUseService : INetUseService
         if (process.ExitCode is not 0)
         {
             // Handle the case where the command failed
-            await Shell.Current.DisplayAlert("Error!",
-                $"Failed to unmap {drive.Letter} with error code {process.ExitCode}: {errorMessage}", "OK");
+            if (errorMessage.Contains("The network connection could not be found."))
+            {
+                await Shell.Current.DisplayAlert("Warning!",
+                    $"Drive {drive.Letter} is already unmapped.", "OK");
+                drive.IsConnected = false;
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
+                drive.IsConnected = false;
+            }
         }
     }
 }
