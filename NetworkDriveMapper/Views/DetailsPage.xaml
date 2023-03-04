@@ -31,22 +31,24 @@
                     <FlexLayout HeightRequest="160"
                                 WidthRequest="160">
 
-                            <Label Text="{Binding Drive.Letter}"
-                                   Style="{StaticResource XXLLabel}"
-                                   HorizontalOptions="Center"
-                                   VerticalOptions="Center"
-                                   Margin="32, 0, 0, 0"/>
+                        <Label Text="{Binding Drive.Letter}"
+                                Style="{StaticResource XXLLabel}"
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                Margin="32, 0, 0, 0"/>
 
                     </FlexLayout>
                 </Frame>
             </Grid>
 
-            <VerticalStackLayout Padding="10" Spacing="10">
+            <VerticalStackLayout Padding="10" 
+                                 Spacing="10"
+                                 Margin="20">
 
                 <Frame Style="{StaticResource CardView}"
-                       Padding="20"
-                       HeightRequest="160">
-                    <VerticalStackLayout Spacing="10">
+                       Padding="10"
+                       HeightRequest="200">
+                    <VerticalStackLayout Spacing="15">
                         <Label Text="{Binding Drive.DriveName, StringFormat='Drive Name: {0}'}"
                                Style="{StaticResource LargeLabel}"
                                HorizontalOptions="Center"/>
@@ -56,11 +58,57 @@
                         <Label Text="{Binding Drive.UserName, StringFormat='User Name: {0}'}"
                                Style="{StaticResource LargeLabel}"
                                HorizontalOptions="Center"/>
+
+                        <Button Text="Delete Drive"
+                                Style="{StaticResource ButtonOutline}"
+                                CommandParameter="{Binding Drive}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DetailsViewModel}}, Path=DisplayActionCommand}"/>
                     </VerticalStackLayout>
                 </Frame>
 
             </VerticalStackLayout>
+
+            <Frame Style="{StaticResource CardView}"
+                   Padding="20"
+                   Margin="30"
+                   Grid.RowSpan="2">
+
+                <StackLayout Margin="0"
+                         Padding="30"
+                         Spacing="15">
+
+                    <Label Text="Drive Letter"
+                       Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Drive.Letter}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Label Text="Address"
+                       Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Drive.Address}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Label Text="Drive Name"
+                       Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Drive.DriveName}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Label Text="Password"
+                       Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Drive.Password}"
+                           IsPassword="True"/>
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Label Text="User Name"
+                       Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Drive.UserName}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Button Text="Update"
+                        Command="{Binding UpdateDriveCommand}" 
+                        Style="{StaticResource ButtonOutline}" />
+
+                </StackLayout>
+            </Frame>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

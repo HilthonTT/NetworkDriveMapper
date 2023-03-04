@@ -11,13 +11,37 @@
 
     <Grid ColumnDefinitions="*, *"
           ColumnSpacing="5"
-          RowDefinitions="*, Auto"
+          RowDefinitions="Auto, *, Auto"
           RowSpacing="0"
           Padding="10">
 
+        <StackLayout Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="20, 20, 20, 50">
+
+            <HorizontalStackLayout  HorizontalOptions="Center"
+                                    VerticalOptions="Center">
+                <Label Text="Progress: "
+                   Margin="0, 0, 10, 15"
+                   Style="{StaticResource LargeLabel}"/>
+                
+                <Label Text="{Binding DriveProgress, StringFormat='{0}%'}"
+                       Style="{StaticResource LargeLabel}"/>
+            </HorizontalStackLayout>
+
+            <ProgressBar Progress="{Binding DrivePercentage}" 
+                    IsVisible="True" 
+                    IsEnabled="True"
+                    ProgressColor="LightGreen"/>
+
+        </StackLayout>
+
         <RefreshView Grid.ColumnSpan="2"
+                     Grid.Row="1"
                      Command="{Binding GetDrivesCommand}"
                      IsRefreshing="{Binding IsRefreshing}">
+
             <CollectionView BackgroundColor="Transparent"
                             ItemsSource="{Binding Drives}"
                             SelectionMode="None">
@@ -83,7 +107,7 @@
                 Style="{StaticResource ButtonOutline}"
                 Command="{Binding ConnectAllDrivesCommand}" 
                 IsEnabled="{Binding IsNotBusy}"
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.Column="1"
                 Margin="8"/>
 
@@ -91,7 +115,7 @@
                 Style="{StaticResource ButtonOutline}"
                 Command="{Binding GoToAddDriveCommand}" 
                 IsEnabled="{Binding IsNotBusy}"
-                Grid.Row="1"
+                Grid.Row="2"
                 Margin="8"/>
 
     </Grid>

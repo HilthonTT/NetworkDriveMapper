@@ -27,13 +27,11 @@ public static class MauiProgram
         builder.Services.AddSingleton<DrivesViewModel>();
         builder.Services.AddTransient<DetailsViewModel>();
         builder.Services.AddTransient<AddViewModel>();
-        builder.Services.AddTransient<UpdateViewModel>();
 
         // Views Registration
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<DetailsPage>();
         builder.Services.AddTransient<AddDrivePage>();
-        builder.Services.AddTransient<UpdatePage>();
 
         return builder.Build();
     }

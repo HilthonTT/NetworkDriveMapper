@@ -16,6 +16,18 @@ public partial class DrivesViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isRefreshing;
 
+    [ObservableProperty]
+    private bool _isConnected;
+
+    [ObservableProperty]
+    private int _driveProgress; //Progress Label
+
+    [ObservableProperty]
+    private int _drivesConnected; // Counts how many drives are connected
+
+    [ObservableProperty]
+    private double _drivePercentage; // The progress bar percentage
+
     /// <summary>
     /// The method gets all the drives in the Table and then tries to map them all using the Process.
     /// </summary>
@@ -36,22 +48,32 @@ public partial class DrivesViewModel : BaseViewModel
                 Drives.Clear();
 
             foreach (var drive in drives)
-                Drives.Add(drive);
+            {
+                Drives.Add(drive);       
+            }
 
             if (OperatingSystem.IsWindows())
             {
                 foreach (var drive in Drives)
                 {
+                    DrivesConnected++;
                     await _netUseService.ConnectDriveAsync(drive);
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
             {
                 foreach (var drive in Drives)
                 {
+                    DrivesConnected++;
                     await _netUseService.ConnectDriveMacOSAsync(drive);
+                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    DrivePercentage = DriveProgress / 100;
                 }
             }
+
+            IsConnected = true;
         }
         catch (Exception ex)
         {
@@ -75,22 +97,32 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
+            DriveProgress = 0;
+            DrivePercentage = 0;
+            IsConnected = false;
             if (Drives?.Count > 0)
             {
                 if (OperatingSystem.IsWindows())
                 {
                     foreach (var drive in Drives)
                     {
+                        DrivesConnected++;
                         await _netUseService.ConnectDriveAsync(drive);
+                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        DrivePercentage = DriveProgress / 100;
                     }
                 }
                 else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
                 {
                     foreach (var drive in Drives)
                     {
+                        DrivesConnected++;
                         await _netUseService.ConnectDriveMacOSAsync(drive);
+                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        DrivePercentage = DriveProgress / 100;
                     }
                 }
+                IsConnected = true;
             }
         }
         catch (Exception ex)

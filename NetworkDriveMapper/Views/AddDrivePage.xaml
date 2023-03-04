@@ -29,7 +29,8 @@
 
         <Label Text="Password"
                Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding Password}" />
+        <Entry Text="{Binding Password}" 
+               IsPassword="True"/>
         <BoxView HeightRequest="0.8" Color="Gray" />
 
         <Label Text="User Name"

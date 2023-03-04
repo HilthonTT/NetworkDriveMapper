@@ -14,6 +14,7 @@ public partial class MainPage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel.GetDrivesCommand.Execute(null);
+        if (_viewModel.IsConnected == false)
+            _viewModel.GetDrivesCommand.Execute(null);
     }
 }
