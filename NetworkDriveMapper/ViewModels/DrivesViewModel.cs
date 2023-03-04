@@ -50,6 +50,7 @@ public partial class DrivesViewModel : BaseViewModel
 
             foreach (var drive in drives)
             {
+                drive.IsConnected = false;
                 Drives.Add(drive);       
             }
 
