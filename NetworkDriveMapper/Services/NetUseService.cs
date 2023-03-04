@@ -2,15 +2,11 @@
 
 public class NetUseService : INetUseService
 {
-    public async Task ConnectDriveAsync(string driveLetter,
-                                        string address,
-                                        string driveName,
-                                        string password,
-                                        string userName)
+    public async Task ConnectDriveAsync(DriveModel drive)
     {
         Process process = new();
         process.StartInfo.FileName = "net";
-        process.StartInfo.Arguments = $"use {driveLetter}: \"\\\\{address}\\{driveName}\" {password} /user:{userName} /persistent:no";
+        process.StartInfo.Arguments = $"use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no";
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.RedirectStandardError = true;
         process.Start();
@@ -23,18 +19,15 @@ public class NetUseService : INetUseService
         {
             // Handle the case where the command failed
             await Shell.Current.DisplayAlert("Error!",
-                $"Mapping failed with drive {driveLetter} with error code {process.ExitCode}: {errorMessage}", "OK");
+                $"Mapping failed with drive {drive.Letter} with error code {process.ExitCode}: {errorMessage}", "OK");
         }
     }
 
-    public async Task ConnectDriveMacOSAsync(string address,
-                                        string driveName,
-                                        string password,
-                                        string userName)
+    public async Task ConnectDriveMacOSAsync(DriveModel drive)
     {
         Process process = new();
         process.StartInfo.FileName = "sudo";
-        process.StartInfo.Arguments = $"-t smbfs //{userName}:{password}@{address}/share {driveName}";
+        process.StartInfo.Arguments = $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
         process.StartInfo.CreateNoWindow = true;
         process.StartInfo.RedirectStandardError = true;
         process.Start();
@@ -47,7 +40,7 @@ public class NetUseService : INetUseService
         {
             // Handle the case where the command failed
             await Shell.Current.DisplayAlert("Error!",
-                $"Mapping failed with drive {driveName} with error code {process.ExitCode}: {errorMessage}", "OK");
+                $"Mapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
         }
     }
 }

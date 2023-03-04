@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace NetworkDriveMapper.ViewModels;
+﻿namespace NetworkDriveMapper.ViewModels;
 
 public partial class DrivesViewModel : BaseViewModel
 {
@@ -44,14 +42,14 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    await _netUseService.ConnectDriveAsync(drive.Letter, drive.Address, drive.DriveName, drive.Password, drive.UserName);
+                    await _netUseService.ConnectDriveAsync(drive);
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
             {
                 foreach (var drive in Drives)
                 {
-                    await _netUseService.ConnectDriveMacOSAsync(drive.Address, drive.DriveName, drive.Password, drive.UserName);
+                    await _netUseService.ConnectDriveMacOSAsync(drive);
                 }
             }
         }
@@ -77,38 +75,20 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            List<Task<Process>> processes = new();
-
-            Process process = new();
-            ProcessStartInfo startInfo = new()
-            {
-                WindowStyle = ProcessWindowStyle.Hidden,
-                FileName = "cmd.exe",
-                CreateNoWindow = true,
-                UseShellExecute= false
-            };
-
             if (Drives?.Count > 0)
             {
                 if (OperatingSystem.IsWindows())
                 {
                     foreach (var drive in Drives)
                     {
-                        await _netUseService.ConnectDriveAsync(drive.Letter, 
-                            drive.Address, 
-                            drive.DriveName, 
-                            drive.Password, 
-                            drive.UserName);
+                        await _netUseService.ConnectDriveAsync(drive);
                     }
                 }
                 else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
                 {
                     foreach (var drive in Drives)
                     {
-                        await _netUseService.ConnectDriveMacOSAsync(drive.Address,
-                            drive.DriveName,
-                            drive.Password,
-                            drive.UserName);
+                        await _netUseService.ConnectDriveMacOSAsync(drive);
                     }
                 }
             }
