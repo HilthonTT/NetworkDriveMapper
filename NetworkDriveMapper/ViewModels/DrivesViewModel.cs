@@ -6,6 +6,7 @@ public partial class DrivesViewModel : BaseViewModel
     private readonly INetUseService _netUseService;
 
     public ObservableCollection<DriveModel> Drives { get; } = new();
+
     public DrivesViewModel(IDriveService driveService, INetUseService netUseService)
     {
         Title = "Network Drive Mapper";
@@ -20,13 +21,13 @@ public partial class DrivesViewModel : BaseViewModel
     private bool _isConnected;
 
     [ObservableProperty]
-    private int _driveProgress; //Progress Label
+    private float _driveProgress; //Progress Label
 
     [ObservableProperty]
-    private int _drivesConnected; // Counts how many drives are connected
+    private List<DriveModel> _connectedDrives = new(); // Counts how many drives are connected
 
     [ObservableProperty]
-    private double _drivePercentage; // The progress bar percentage
+    private float _drivePercentage; // The progress bar percentage
 
     /// <summary>
     /// The method gets all the drives in the Table and then tries to map them all using the Process.
@@ -56,11 +57,12 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    DrivesConnected++;
-                    await _netUseService.ConnectDriveAsync(drive);
-                    if (drive.IsConnected)
+                    if (drive.IsConnected == false)
                     {
-                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        ConnectedDrives.Add(drive);
+                        await _netUseService.ConnectDriveAsync(drive);
+                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
                         drive.ButtonColor = "#00FF00"; // Green
                     }
@@ -73,12 +75,13 @@ public partial class DrivesViewModel : BaseViewModel
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
             {
                 foreach (var drive in Drives)
-                {
-                    DrivesConnected++;
-                    await _netUseService.ConnectDriveMacOSAsync(drive);
-                    if (drive.IsConnected)
+                { 
+                    if (drive.IsConnected == false)
                     {
-                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        ConnectedDrives.Add(drive);
+                        await _netUseService.ConnectDriveMacOSAsync(drive);
+                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
                         drive.ButtonColor = "#00FF00"; // Green
                     }
@@ -114,7 +117,7 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            DrivesConnected = 0;
+            ConnectedDrives.Clear();
             DriveProgress = 0;
             DrivePercentage = 0;
             IsConnected = false;
@@ -122,14 +125,16 @@ public partial class DrivesViewModel : BaseViewModel
             if (OperatingSystem.IsWindows() && Drives?.Count > 0)
             {
                 foreach (var drive in Drives)
-                {
-                    DrivesConnected++;
-                    await _netUseService.ConnectDriveAsync(drive);
-                    if (drive.IsConnected)
-                    {       
-                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                {        
+                    if (drive.IsConnected == false)
+                    {
+                        ConnectedDrives.Add(drive);
+                        await _netUseService.ConnectDriveAsync(drive);
+                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100; 
                         drive.ButtonColor = "#00FF00"; // Green
+                        drive.IsConnected = true;
                     }
                     else
                     {
@@ -143,13 +148,15 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    DrivesConnected++;
-                    await _netUseService.ConnectDriveMacOSAsync(drive);
-                    if (drive.IsConnected)
+                    if (drive.IsConnected == false)
                     {
-                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        ConnectedDrives.Add(drive);
+                        await _netUseService.ConnectDriveMacOSAsync(drive);
+                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
                         drive.ButtonColor = "#00FF00"; // Green
+                        drive.IsConnected = true;
                     }
                     else
                     {
@@ -178,7 +185,7 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            DrivesConnected = 0;
+            ConnectedDrives.Clear();
             DriveProgress = 0;
             DrivePercentage = 0;
             IsConnected = false;
@@ -187,16 +194,26 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    await _netUseService.DisconnectDrivesAsync(drive);
-                    drive.ButtonColor = "#FF0000"; // Red
+                    if (drive.IsConnected)
+                    {
+                        await _netUseService.DisconnectDrivesAsync(drive);
+                        drive.ButtonColor = "#FF0000"; // Red
+                        drive.IsConnected = false;
+                        ConnectedDrives.Remove(drive);
+                    }
                 }
             }
             else if (OperatingSystem.IsMacOS())
             {
                 foreach (var drive in Drives)
                 {
-                    await _netUseService.DisconnectDrivesMacOSAsync(drive);
-                    drive.ButtonColor = "#FF0000"; // Red
+                    if (drive.IsConnected)
+                    {
+                        await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                        drive.ButtonColor = "#FF0000"; // Red
+                        drive.IsConnected = false;
+                        ConnectedDrives.Remove(drive);
+                    }
                 }
             }
 
@@ -214,26 +231,41 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            DrivesConnected = 0;
-            DriveProgress = 0;
             if (OperatingSystem.IsWindows())
             {
-                await _netUseService.ConnectDriveAsync(drive);
-                if (drive.IsConnected)
+                
+                if (drive.IsConnected == false)
                 {
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    await _netUseService.ConnectDriveAsync(drive);
+                    ConnectedDrives.Add(drive);
+                    float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                    DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                     DrivePercentage = DriveProgress / 100;
                     drive.ButtonColor = "#00FF00"; // Green
+                    drive.IsConnected = true;
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Warning!",
+                        $"Drive {drive.Letter} is already mounted.", "OK");
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-            {
-                await _netUseService.ConnectDriveMacOSAsync(drive);
-                if (drive.IsConnected)
+            {   
+                if (drive.IsConnected == false)
                 {
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    await _netUseService.ConnectDriveMacOSAsync(drive);
+                    ConnectedDrives.Add(drive);
+                    float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                    DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                     DrivePercentage = DriveProgress / 100;
                     drive.ButtonColor = "#00FF00"; // Green
+                    drive.IsConnected = true;
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Warning!",
+                        $"Drive {drive.Letter} is already mounted.", "OK");
                 }
             }
         }
@@ -249,27 +281,43 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            DrivesConnected = 0;
-            DriveProgress = 0;
-            DrivePercentage = 0;
+            Debug.WriteLine(ConnectedDrives.Count);
+            //DriveProgress = 0;
+            //DrivePercentage = 0;
             if (OperatingSystem.IsWindows())
             {
-                await _netUseService.DisconnectDrivesAsync(drive);
                 if (drive.IsConnected)
                 {
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    await _netUseService.DisconnectDrivesAsync(drive);
+                    ConnectedDrives.Remove(drive);
+                    float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                    DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                     DrivePercentage = DriveProgress / 100;
                     drive.ButtonColor = "#FF0000"; // Red
+                    drive.IsConnected = false;
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Warning!",
+                        $"Drive {drive.Letter} is unmounted.", "OK");
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-            {
-                await _netUseService.DisconnectDrivesMacOSAsync(drive);
+            { 
                 if (drive.IsConnected)
                 {
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
+                    await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                    ConnectedDrives.Remove(drive);
+                    float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                    DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                     DrivePercentage = DriveProgress / 100;
                     drive.ButtonColor = "#FF0000"; // Red
+                    drive.IsConnected = false;
+                }
+                else
+                {
+                    await Shell.Current.DisplayAlert("Warning!",
+                        $"Drive {drive.Letter} is unmounted.", "OK");
                 }
             }
         }

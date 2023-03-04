@@ -3,11 +3,14 @@
 public partial class AddViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
+    private readonly DrivesViewModel _drivesViewModel;
 
-    public AddViewModel(IDriveService driveService)
+    public AddViewModel(IDriveService driveService, 
+                        DrivesViewModel drivesViewModel)
     {
         Title = "Add a drive";
         _driveService = driveService;
+        _drivesViewModel = drivesViewModel;
     }
 
     [ObservableProperty]
@@ -43,14 +46,18 @@ public partial class AddViewModel : BaseViewModel
                 return;
             }
 
-            var response = await _driveService.AddDrive(new DriveModel
+            var driveModel = new DriveModel
             {
                 Letter = Letter,
                 Address = Address,
                 DriveName = DriveName,
                 Password = Password,
                 UserName = UserName
-            });
+            };
+
+            var response = await _driveService.AddDrive(driveModel);
+
+            _drivesViewModel.Drives.Add(driveModel);
 
             if (response > 0)
                 await Shell.Current.DisplayAlert("Drive Added!",
@@ -58,7 +65,7 @@ public partial class AddViewModel : BaseViewModel
                     {
                         if (result.Result)
                         {
-                            await Shell.Current.GoToAsync($"{nameof(MainPage)}", true);
+                            await Shell.Current.Navigation.PopToRootAsync(true);
                         }
                         else
                         {

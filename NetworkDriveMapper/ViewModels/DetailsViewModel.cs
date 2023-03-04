@@ -45,7 +45,7 @@ public partial class DetailsViewModel : BaseViewModel
                 {
                     if (result.Result)
                     {
-                        await Shell.Current.Navigation.PopToRootAsync();
+                        await Shell.Current.Navigation.PopToRootAsync(true);
                     }
                     else
                     {
