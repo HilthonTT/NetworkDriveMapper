@@ -9,6 +9,13 @@
              Title="{Binding Title}"
              x:Class="NetworkDriveMapper.MainPage">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add A Drive" 
+                     Order="Primary" 
+                     Priority="0"
+                     Command="{Binding GoToAddDriveCommand}"/>
+    </ContentPage.ToolbarItems>
+
     <Grid ColumnDefinitions="*, *"
           ColumnSpacing="5"
           RowDefinitions="Auto, *, Auto"
@@ -33,7 +40,7 @@
             <ProgressBar Progress="{Binding DrivePercentage}" 
                     IsVisible="True" 
                     IsEnabled="True"
-                    ProgressColor="LightGreen"/>
+                    ProgressColor="Green"/>
 
         </StackLayout>
 
@@ -66,7 +73,7 @@
                     <DataTemplate x:DataType="models:DriveModel">
                         <Grid Padding="10">
                             <Frame HeightRequest="125"
-                                   WidthRequest="500"
+                                   WidthRequest="800"
                                    Padding="10"
                                    Style="{StaticResource CardView}">
                                 <Frame.GestureRecognizers>
@@ -74,7 +81,7 @@
                                                           Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=GoToDetailsCommand}"/>
                                 </Frame.GestureRecognizers>
                                 <Grid Padding="0"
-                                      ColumnDefinitions="125, *">
+                                      ColumnDefinitions="125, *, 125">
 
                                     <FlexLayout>
                                         <Frame WidthRequest="100"
@@ -86,7 +93,7 @@
                                                    VerticalOptions="Center"/>
                                         </Frame>
                                     </FlexLayout>
-                                    
+
                                     <VerticalStackLayout Grid.Column="1"
                                                          Padding="10"
                                                          VerticalOptions="Center">
@@ -95,6 +102,17 @@
                                         <Label Text="{Binding UserName}"
                                                Style="{StaticResource MediumLabel}"/>
                                     </VerticalStackLayout>
+
+                                    <FlexLayout Grid.Column="2">
+
+                                        <Frame WidthRequest="50"
+                                               HeightRequest="105"
+                                               CornerRadius="20"
+                                               Margin="45, 0, 2, 0"
+                                               BackgroundColor="{Binding MyButtonColorAsColor}">
+
+                                        </Frame>
+                                    </FlexLayout>
                                 </Grid>
                             </Frame>
                         </Grid>
@@ -108,14 +126,15 @@
                 Command="{Binding ConnectAllDrivesCommand}" 
                 IsEnabled="{Binding IsNotBusy}"
                 Grid.Row="2"
-                Grid.Column="1"
+                Grid.Column="0"
                 Margin="8"/>
 
-        <Button Text="Add a drive"
+        <Button Text="Disconnect Drives"
                 Style="{StaticResource ButtonOutline}"
-                Command="{Binding GoToAddDriveCommand}" 
+                Command="{Binding DisconnectAllDrivesCommand}" 
                 IsEnabled="{Binding IsNotBusy}"
                 Grid.Row="2"
+                Grid.Column="1"
                 Margin="8"/>
 
     </Grid>

@@ -58,8 +58,16 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     DrivesConnected++;
                     await _netUseService.ConnectDriveAsync(drive);
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
-                    DrivePercentage = DriveProgress / 100;
+                    if (drive.IsConnected)
+                    {
+                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        DrivePercentage = DriveProgress / 100;
+                        drive.ButtonColor = "#00FF00"; // Green
+                    }
+                    else
+                    {
+                        drive.ButtonColor = "#FF0000"; // Red
+                    }
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
@@ -68,8 +76,16 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     DrivesConnected++;
                     await _netUseService.ConnectDriveMacOSAsync(drive);
-                    DriveProgress = DrivesConnected / Drives.Count * 100;
-                    DrivePercentage = DriveProgress / 100;
+                    if (drive.IsConnected)
+                    {
+                        DriveProgress = DrivesConnected / Drives.Count * 100;
+                        DrivePercentage = DriveProgress / 100;
+                        drive.ButtonColor = "#00FF00"; // Green
+                    }
+                    else
+                    {
+                        drive.ButtonColor = "#FF0000"; // Red
+                    }
                 }
             }
 
@@ -89,7 +105,8 @@ public partial class DrivesViewModel : BaseViewModel
     }
 
     /// <summary>
-    /// Maps all the drives. Checks if the user's OS is windows or is MacOS since their mapping commands are different.
+    /// Maps all the drives. 
+    /// Checks if the user's OS is windows or is MacOS since their mapping commands are different.
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
@@ -97,31 +114,49 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
+            DrivesConnected = 0;
             DriveProgress = 0;
             DrivePercentage = 0;
             IsConnected = false;
-            if (Drives?.Count > 0)
+
+            if (OperatingSystem.IsWindows() && Drives?.Count > 0)
             {
-                if (OperatingSystem.IsWindows())
+                foreach (var drive in Drives)
                 {
-                    foreach (var drive in Drives)
-                    {
-                        DrivesConnected++;
-                        await _netUseService.ConnectDriveAsync(drive);
+                    DrivesConnected++;
+                    await _netUseService.ConnectDriveAsync(drive);
+                    if (drive.IsConnected)
+                    {       
                         DriveProgress = DrivesConnected / Drives.Count * 100;
-                        DrivePercentage = DriveProgress / 100;
+                        DrivePercentage = DriveProgress / 100; 
+                        drive.ButtonColor = "#00FF00"; // Green
+                    }
+                    else
+                    {
+                        drive.ButtonColor = "#FF0000"; // Red
                     }
                 }
-                else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+
+                IsConnected = true;
+            }
+            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst() && Drives?.Count > 0)
+            {
+                foreach (var drive in Drives)
                 {
-                    foreach (var drive in Drives)
+                    DrivesConnected++;
+                    await _netUseService.ConnectDriveMacOSAsync(drive);
+                    if (drive.IsConnected)
                     {
-                        DrivesConnected++;
-                        await _netUseService.ConnectDriveMacOSAsync(drive);
                         DriveProgress = DrivesConnected / Drives.Count * 100;
                         DrivePercentage = DriveProgress / 100;
+                        drive.ButtonColor = "#00FF00"; // Green
+                    }
+                    else
+                    {
+                        drive.ButtonColor = "#FF0000"; // Red
                     }
                 }
+                
                 IsConnected = true;
             }
         }
@@ -131,6 +166,54 @@ public partial class DrivesViewModel : BaseViewModel
                 $"Unable to map drives: {ex.Message}", "OK");
         }
     }
+
+    /// <summary>
+    /// Disconnects all mounted drives.
+    /// It checks for the OS, do this it's windows and do this if it's MacOS
+    /// </summary>
+    /// <returns></returns>
+
+    [RelayCommand]
+    private async Task DisconnectAllDrivesAsync()
+    {
+        try
+        {
+            DrivesConnected = 0;
+            DriveProgress = 0;
+            DrivePercentage = 0;
+            IsConnected = false;
+
+            if (OperatingSystem.IsWindows())
+            {
+                foreach (var drive in Drives)
+                {
+                    await _netUseService.DisconnectDrivesAsync(drive);
+                    drive.ButtonColor = "#FF0000"; // Red
+                }
+            }
+            else if (OperatingSystem.IsMacOS())
+            {
+                foreach (var drive in Drives)
+                {
+                    await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                    drive.ButtonColor = "#FF0000"; // Red
+                }
+            }
+
+            IsConnected = false;
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error!",
+                $"Unable to disconnect drives: {ex.Message}", "OK");
+        }
+    }
+
+    /// <summary>
+    /// Views the detail of the drives, IP Address, Drive Letter, userName.
+    /// </summary>
+    /// <param name="drive"></param>
+    /// <returns></returns>
 
     [RelayCommand]
     private async Task GoToDetailsAsync(DriveModel drive)
@@ -144,6 +227,11 @@ public partial class DrivesViewModel : BaseViewModel
                 { "Drive", drive }
             });
     }
+
+    /// <summary>
+    /// Goes to the AddDrivePage
+    /// </summary>
+    /// <returns></returns>
 
     [RelayCommand]
     private async Task GoToAddDriveAsync()
