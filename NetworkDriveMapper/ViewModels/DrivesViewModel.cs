@@ -5,12 +5,14 @@ namespace NetworkDriveMapper.ViewModels;
 public partial class DrivesViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
+    private readonly INetUseService _netUseService;
 
     public ObservableCollection<DriveModel> Drives { get; } = new();
-    public DrivesViewModel(IDriveService driveService)
+    public DrivesViewModel(IDriveService driveService, INetUseService netUseService)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
+        _netUseService = netUseService;
     }
 
     [ObservableProperty]
@@ -28,17 +30,6 @@ public partial class DrivesViewModel : BaseViewModel
 
         try
         {
-            List<Task<Process>> processes = new();
-
-            //Process process = new();
-            //ProcessStartInfo startInfo = new()
-            //{
-            //    WindowStyle = ProcessWindowStyle.Hidden,
-            //    FileName = "cmd.exe",
-            //    CreateNoWindow = true,
-            //    UseShellExecute = false
-            //};
-
             IsBusy = true;
 
             var drives = await _driveService.GetDriveList();
@@ -53,52 +44,14 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 foreach (var drive in Drives)
                 {
-                    Process process = new();
-                    ProcessStartInfo startInfo = new()
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "cmd.exe",
-                        CreateNoWindow = true,
-                        UseShellExecute = false,
-                        Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no"
-                    };
-                    process.StartInfo = startInfo;
-                    process.WaitForExit();
-
-                    if (process.HasExited)
-                    {
-                        if (process.ExitCode is not 0)
-                            await Shell.Current.DisplayAlert("Error!",
-                                $"There was an error when mapping {drive.DriveName}.", "OK");
-                    }
-
-                    processes.Add(Task.Run(() => Process.Start(startInfo)));
-                    await Task.WhenAll(processes).ConfigureAwait(false);
+                    await _netUseService.ConnectDriveAsync(drive.Letter, drive.Address, drive.DriveName, drive.Password, drive.UserName);
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
             {
                 foreach (var drive in Drives)
                 {
-                    Process process = new();
-                    ProcessStartInfo startInfo = new()
-                    {
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        FileName = "cmd.exe",
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    };
-
-                    Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
-                    startInfo.Arguments = $"sudo -t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
-                    process.StartInfo = startInfo;
-
-                    //if (process.ExitCode is not 0)
-                    //    await Shell.Current.DisplayAlert("Error!",
-                    //        $"There was an error when mapping {drive.DriveName}.", "OK");
-
-                    processes.Add(Task.Run(() => Process.Start(startInfo)));
-                    await Task.WhenAll(processes).ConfigureAwait(false);
+                    await _netUseService.ConnectDriveMacOSAsync(drive.Address, drive.DriveName, drive.Password, drive.UserName);
                 }
             }
         }
@@ -141,21 +94,21 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     foreach (var drive in Drives)
                     {
-                        startInfo.Arguments = $"/C net use {drive.Letter}: \"\\\\{drive.Address}\\{drive.DriveName}\" {drive.Password} /user:{drive.UserName} /persistent:no";
-                        process.StartInfo = startInfo;
-                        processes.Add(Task.Run(() => Process.Start(startInfo)));
-                        await Task.WhenAll(processes).ConfigureAwait(false);
+                        await _netUseService.ConnectDriveAsync(drive.Letter, 
+                            drive.Address, 
+                            drive.DriveName, 
+                            drive.Password, 
+                            drive.UserName);
                     }
                 }
                 else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
                 {
                     foreach (var drive in Drives)
                     {
-                        Process.Start("sudo", $"-t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}");
-                        startInfo.Arguments = $"sudo -t smbfs //{drive.UserName}:{drive.Password}@{drive.Address}/share {drive.DriveName}";
-                        process.StartInfo = startInfo;
-                        processes.Add(Task.Run(() => Process.Start(startInfo)));
-                        await Task.WhenAll(processes).ConfigureAwait(false);
+                        await _netUseService.ConnectDriveMacOSAsync(drive.Address,
+                            drive.DriveName,
+                            drive.Password,
+                            drive.UserName);
                     }
                 }
             }

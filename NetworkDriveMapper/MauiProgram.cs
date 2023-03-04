@@ -21,6 +21,7 @@ public static class MauiProgram
 
         // Services
         builder.Services.AddSingleton<IDriveService, DriveService>();
+        builder.Services.AddSingleton<INetUseService, NetUseService>();
 
         // View Models
         builder.Services.AddSingleton<DrivesViewModel>();
