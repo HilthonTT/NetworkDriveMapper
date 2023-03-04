@@ -186,7 +186,6 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            ConnectedDrives.Clear();
             DriveProgress = 0;
             DrivePercentage = 0;
             IsConnected = false;
