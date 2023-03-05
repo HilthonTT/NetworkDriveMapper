@@ -406,6 +406,10 @@ public partial class DrivesViewModel : BaseViewModel
                     drive.IsConnected = true;
                     drive.ButtonColor = "#00FF00"; // Green
                 }
+                else
+                {
+                    drive.ButtonColor = "#FF0000"; // Red
+                }
 
                 Drives.Add(drive);
             }
