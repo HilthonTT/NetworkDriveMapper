@@ -1,4 +1,6 @@
-﻿namespace NetworkDriveMapper.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace NetworkDriveMapper.ViewModels;
 
 public partial class DrivesViewModel : BaseViewModel
 {
@@ -13,19 +15,20 @@ public partial class DrivesViewModel : BaseViewModel
     }
 
     [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(FilterDrivesCommand))]
+    private string _searchText;
+
+    [ObservableProperty]
     private bool _isRefreshing;
 
     [ObservableProperty]
     private bool _isConnected;
 
     [ObservableProperty]
-    private float _driveProgress; //Progress Label
+    private float _driveProgress; // Progress Label, shows the percentage in number
 
     [ObservableProperty]
-    private List<DriveModel> _connectedDrives = new(); // Counts how many drives are connected
-
-    [ObservableProperty]
-    private float _drivePercentage; // The progress bar percentage
+    private float _drivePercentage; // The progress bar percentage, changes the progress bar's length.
 
     /// <summary>
     /// The method gets all the drives in the Table and then tries to map them all using the Process.
@@ -58,16 +61,19 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     if (drive.IsConnected == false)
                     {
-                        ConnectedDrives.Add(drive);
                         await _netUseService.ConnectDriveAsync(drive);
+                        if (_netUseService.IsError() == false)
+                        {
+                            ConnectedDrives.Add(drive);
+                            drive.ButtonColor = "#00FF00"; // Green
+                        }
+                        else
+                        {
+                            drive.ButtonColor = "#FF0000"; // Red
+                        }
                         float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                         DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
-                        drive.ButtonColor = "#00FF00"; // Green
-                    }
-                    else
-                    {
-                        drive.ButtonColor = "#FF0000"; // Red
                     }
                 }
             }
@@ -77,16 +83,19 @@ public partial class DrivesViewModel : BaseViewModel
                 { 
                     if (drive.IsConnected == false)
                     {
-                        ConnectedDrives.Add(drive);
                         await _netUseService.ConnectDriveMacOSAsync(drive);
+                        if (_netUseService.IsError() == false)
+                        {
+                            ConnectedDrives.Add(drive);
+                            drive.ButtonColor = "#00FF00"; // Green
+                        }
+                        else
+                        {
+                            drive.ButtonColor = "#FF0000"; // Red
+                        }
                         float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                         DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
-                        drive.ButtonColor = "#00FF00"; // Green
-                    }
-                    else
-                    {
-                        drive.ButtonColor = "#FF0000"; // Red
                     }
                 }
             }
@@ -133,17 +142,19 @@ public partial class DrivesViewModel : BaseViewModel
                 {        
                     if (drive.IsConnected == false)
                     {
-                        ConnectedDrives.Add(drive);
                         await _netUseService.ConnectDriveAsync(drive);
+                        if (_netUseService.IsError() == false)
+                        {
+                            ConnectedDrives.Add(drive);
+                            drive.ButtonColor = "#00FF00"; // Green
+                        }
+                        else
+                        {
+                            drive.ButtonColor = "#FF0000"; // Red
+                        }
                         float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                         DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100; 
-                        drive.ButtonColor = "#00FF00"; // Green
-                        drive.IsConnected = true;
-                    }
-                    else
-                    {
-                        drive.ButtonColor = "#FF0000"; // Red
                     }
                 }
 
@@ -155,17 +166,20 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     if (drive.IsConnected == false)
                     {
-                        ConnectedDrives.Add(drive);
                         await _netUseService.ConnectDriveMacOSAsync(drive);
+                        if (_netUseService.IsError() == false)
+                        {
+                            ConnectedDrives.Add(drive);
+                            drive.ButtonColor = "#00FF00"; // Green
+                        }
+                        else
+                        {
+                            drive.ButtonColor = "#FF0000"; // Red
+                        }
                         float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                         DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                         DrivePercentage = DriveProgress / 100;
-                        drive.ButtonColor = "#00FF00"; // Green
-                        drive.IsConnected = true;
-                    }
-                    else
-                    {
-                        drive.ButtonColor = "#FF0000"; // Red
+                        
                     }
                 }
                 
@@ -241,12 +255,18 @@ public partial class DrivesViewModel : BaseViewModel
                 if (drive.IsConnected == false)
                 {
                     await _netUseService.ConnectDriveAsync(drive);
-                    ConnectedDrives.Add(drive);
+                    if (_netUseService.IsError() == false)
+                    {
+                        ConnectedDrives.Add(drive);
+                        drive.ButtonColor = "#00FF00"; // Green
+                    }
+                    else
+                    {
+                        drive.ButtonColor = "#FF0000"; // Red
+                    }
                     float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                     DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
                     DrivePercentage = DriveProgress / 100;
-                    drive.ButtonColor = "#00FF00"; // Green
-                    drive.IsConnected = true;
                 }
                 else
                 {
@@ -304,6 +324,7 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     await Shell.Current.DisplayAlert("Warning!",
                         $"Drive {drive.Letter} is unmounted.", "OK");
+                    drive.ButtonColor = "#FF0000"; // Red
                 }
             }
             else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
@@ -360,5 +381,29 @@ public partial class DrivesViewModel : BaseViewModel
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task FilterDrivesAsync()
+    {
+        var drives = await _driveService.GetDriveList();
+
+        if (Drives.Count != 0)
+            Drives.Clear();
+
+        foreach (var drive in drives)
+        {
+            Drives.Add(drive);
+        }
+
+        var output = Drives;
+
+        if (string.IsNullOrWhiteSpace(SearchText) == false)
+        {
+            output = (ObservableCollection<DriveModel>)output.Where(d => d.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase) ||
+                d.Address.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase));
+        }
+
+        Drives = output;
     }
 }

@@ -15,5 +15,9 @@ public partial class BaseViewModel : ObservableObject
 
     public bool IsNotBusy => !IsBusy;
 
-    public ObservableCollection<DriveModel> Drives { get; } = new();
+    [ObservableProperty]
+    private ObservableCollection<DriveModel> _drives = new();
+
+    [ObservableProperty]
+    private List<DriveModel> _connectedDrives = new(); // Counts how many drives are connected
 }

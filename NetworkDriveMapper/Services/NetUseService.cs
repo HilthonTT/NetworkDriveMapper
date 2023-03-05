@@ -2,6 +2,18 @@
 
 public class NetUseService : INetUseService
 {
+    public string ErrorMessage = "";
+
+    public bool IsError()
+    {
+        if (string.IsNullOrWhiteSpace(ErrorMessage) == false)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     /// <summary>
     /// Maps the drive on windows.
     /// </summary>
@@ -28,17 +40,23 @@ public class NetUseService : INetUseService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already mounted.", "OK");
                 drive.IsConnected = true;
+                drive.ButtonColor = "#00FF00"; // Green
+                ErrorMessage = "";
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error!",
                     $"Mapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
+                ErrorMessage = errorMessage;
             }
         }
         else
         {
             drive.IsConnected = true;
+            drive.ButtonColor = "#00FF00"; // Green
+            ErrorMessage = "";
         }
     }
 
@@ -68,12 +86,14 @@ public class NetUseService : INetUseService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already mounted.", "OK");
                 drive.IsConnected = true;
+                ErrorMessage = "";
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error!",
                     $"Mapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
+                ErrorMessage = errorMessage;
             }
         }
         else
@@ -108,14 +128,21 @@ public class NetUseService : INetUseService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already unmapped.", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
+                ErrorMessage = "";
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error!",
                     $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
+                ErrorMessage = errorMessage;
             }
         }
+
+        drive.ButtonColor = "#FF0000"; // Red
+        ErrorMessage = "";
     }
 
     /// <summary>
@@ -144,13 +171,20 @@ public class NetUseService : INetUseService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already unmapped.", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
+                ErrorMessage = "";
             }
             else
             {
                 await Shell.Current.DisplayAlert("Error!",
                     $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
+                ErrorMessage = errorMessage;
             }
         }
+
+        drive.ButtonColor = "#FF0000"; // Red
+        ErrorMessage = "";
     }
 }

@@ -1,25 +1,36 @@
 ﻿using SQLite;
+using System.ComponentModel.DataAnnotations;
 
 namespace NetworkDriveMapper.Models;
 
-public partial class DriveModel : ObservableObject
+public partial class DriveModel : ObservableValidator
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _letter;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _address;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _driveName;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _password;
 
     [ObservableProperty]
+    [NotifyDataErrorInfo]
+    [Required]
     private string _userName;
 
     [ObservableProperty]

@@ -10,6 +10,7 @@ public partial class DetailsViewModel : BaseViewModel
     }
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Drives))]
     private DriveModel _drive;
 
 
@@ -24,7 +25,17 @@ public partial class DetailsViewModel : BaseViewModel
 
             if (deleteReponse > 0)
                 await Shell.Current.DisplayAlert("Success",
-                   $"Drive {drive.DriveName} has been deleted", "OK");
+                   $"Drive {drive.DriveName} has been deleted", "OK", "Cancel").ContinueWith(async (result) =>
+                   {
+                       if (result.Result)
+                       {
+                           await Shell.Current.Navigation.PopToRootAsync(true);
+                       }
+                       else
+                       {
+                           await Shell.Current.Navigation.PopToRootAsync(true);
+                       }
+                   });
         }
         else
         {
@@ -49,7 +60,7 @@ public partial class DetailsViewModel : BaseViewModel
                     }
                     else
                     {
-                        Debug.WriteLine("Cancel button pressed");
+                        await Shell.Current.Navigation.PopToRootAsync(true);
                     }
                 });
         }

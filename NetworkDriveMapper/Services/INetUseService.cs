@@ -6,5 +6,6 @@
         Task ConnectDriveMacOSAsync(DriveModel drive);
         Task DisconnectDrivesAsync(DriveModel drive);
         Task DisconnectDrivesMacOSAsync(DriveModel drive);
+        bool IsError();
     }
 }

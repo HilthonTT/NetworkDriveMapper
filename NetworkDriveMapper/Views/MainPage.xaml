@@ -42,6 +42,12 @@
                     IsEnabled="True"
                     ProgressColor="Green"/>
 
+            <Entry Text="{Binding SearchText}"
+                   BackgroundColor="LightGray"
+                   Placeholder="Search Drive"
+                   Margin="20, 30, 20, 0"
+                   TextColor="Black"/>
+
         </StackLayout>
 
         <RefreshView Grid.ColumnSpan="2"
