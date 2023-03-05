@@ -15,10 +15,6 @@ public partial class DrivesViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(FilterDrivesCommand))]
-    private string _searchText;
-
-    [ObservableProperty]
     private bool _isRefreshing;
 
     [ObservableProperty]
@@ -381,29 +377,5 @@ public partial class DrivesViewModel : BaseViewModel
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task FilterDrivesAsync()
-    {
-        var drives = await _driveService.GetDriveList();
-
-        if (Drives.Count != 0)
-            Drives.Clear();
-
-        foreach (var drive in drives)
-        {
-            Drives.Add(drive);
-        }
-
-        var output = Drives;
-
-        if (string.IsNullOrWhiteSpace(SearchText) == false)
-        {
-            output = (ObservableCollection<DriveModel>)output.Where(d => d.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase) ||
-                d.Address.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase));
-        }
-
-        Drives = output;
     }
 }
