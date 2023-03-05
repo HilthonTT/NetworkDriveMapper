@@ -9,39 +9,50 @@
              ios:Page.UseSafeArea="True"
              Title="{Binding Title}">
 
-    <StackLayout Margin="10"
-                 Spacing="10">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="10"
+                             Spacing="10"
+                             Margin="20">
 
-        <Label Text="Drive Letter"
-               Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding Letter}" />
-        <BoxView HeightRequest="0.8" Color="Gray" />
+            <Frame Style="{StaticResource CardView}"
+                       Padding="10">
+                <StackLayout Spacing="15">
 
-        <Label Text="Address"
-               Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding Address}" />
-        <BoxView HeightRequest="0.8" Color="Gray" />
+                    <Label Text="Drive Letter"
+                               Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Letter}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
 
-        <Label Text="Drive Name"
-               Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding DriveName}" />
-        <BoxView HeightRequest="0.8" Color="Gray" />
+                    <Label Text="Address"
+                               Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Address}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
 
-        <Label Text="Password"
-               Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding Password}" 
-               IsPassword="True"/>
-        <BoxView HeightRequest="0.8" Color="Gray" />
+                    <Label Text="Drive Name"
+                               Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding DriveName}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
 
-        <Label Text="User Name"
-               Style="{StaticResource LargeLabel}"/>
-        <Entry Text="{Binding UserName}" />
-        <BoxView HeightRequest="0.8" Color="Gray" />
+                    <Label Text="Password"
+                               Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Password}" 
+                               IsPassword="True"/>
+                    <BoxView HeightRequest="0.8" Color="Gray" />
 
-        <Button Text="Save"
-                Command="{Binding AddDriveCommand}" 
-                Style="{StaticResource ButtonOutline}" />
+                    <Label Text="User Name"
+                               Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding UserName}" />
+                    <BoxView HeightRequest="0.8" Color="Gray" />
+
+                    <Button Text="Save"
+                                Command="{Binding AddDriveCommand}" 
+                                Style="{StaticResource ButtonOutline}" />
 
 
-    </StackLayout>
+                </StackLayout>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+
 </ContentPage>

@@ -5,8 +5,6 @@ public partial class DrivesViewModel : BaseViewModel
     private readonly IDriveService _driveService;
     private readonly INetUseService _netUseService;
 
-    public ObservableCollection<DriveModel> Drives { get; } = new();
-
     public DrivesViewModel(IDriveService driveService, INetUseService netUseService)
     {
         Title = "Network Drive Mapper";
@@ -117,11 +115,17 @@ public partial class DrivesViewModel : BaseViewModel
     private async Task ConnectAllDrivesAsync()
     {
         try
-        {
-            ConnectedDrives.Clear();
+        {  
             DriveProgress = 0;
             DrivePercentage = 0;
             IsConnected = false;
+
+            foreach (var drive in ConnectedDrives)
+            {
+                drive.IsConnected = false;
+            }
+
+            ConnectedDrives.Clear();
 
             if (OperatingSystem.IsWindows() && Drives?.Count > 0)
             {

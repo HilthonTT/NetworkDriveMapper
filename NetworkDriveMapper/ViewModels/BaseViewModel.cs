@@ -14,4 +14,6 @@ public partial class BaseViewModel : ObservableObject
     private string title;
 
     public bool IsNotBusy => !IsBusy;
+
+    public ObservableCollection<DriveModel> Drives { get; } = new();
 }

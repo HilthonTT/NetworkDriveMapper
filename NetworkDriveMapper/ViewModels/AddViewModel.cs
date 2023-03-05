@@ -3,14 +3,12 @@
 public partial class AddViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
-    private readonly DrivesViewModel _drivesViewModel;
 
     public AddViewModel(IDriveService driveService, 
                         DrivesViewModel drivesViewModel)
     {
         Title = "Add a drive";
         _driveService = driveService;
-        _drivesViewModel = drivesViewModel;
     }
 
     [ObservableProperty]
@@ -41,7 +39,7 @@ public partial class AddViewModel : BaseViewModel
                 string.IsNullOrWhiteSpace(UserName))
             {
                 await Shell.Current.DisplayAlert("Error!",
-                    "Unable to add drive: every field must be populated.", "OK");
+                    "Unable to add drive: Every field must be populated.", "OK");
 
                 return;
             }
@@ -57,11 +55,17 @@ public partial class AddViewModel : BaseViewModel
 
             var response = await _driveService.AddDrive(driveModel);
 
-            _drivesViewModel.Drives.Add(driveModel);
+            var driveList = await _driveService.GetDriveList();
+
+            Drives.Clear();
+            foreach (var drive in driveList)
+            {   
+                Drives.Add(drive);
+            }
 
             if (response > 0)
                 await Shell.Current.DisplayAlert("Drive Added!",
-                    $"The drive {DriveName} hasb enn added", "OK", "Cancel").ContinueWith(async (result) =>
+                    $"The drive {DriveName} has been added!", "OK", "Cancel").ContinueWith(async (result) =>
                     {
                         if (result.Result)
                         {
