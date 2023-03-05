@@ -389,21 +389,23 @@ public partial class DrivesViewModel : BaseViewModel
         {
             var drives = await _driveService.GetDriveList();
             var driveList = new List<DriveModel>();
-            var AllDrives = new List<DriveModel>();
 
-            foreach (var d in Drives)
+            // Adds each drive into the driveList that was in Drive before clearing it.
+            // To check if it was connected or not.
+            foreach (var d in Drives) 
             {
                 driveList.Add(d);
             }
 
             Drives.Clear();
 
+            // Checks if the drive was in the driveList, if it was, put the value its IsConnected previous value.
             foreach (var drive in drives)
             {
                 var selectedDrive = driveList.Where(d => d.Id == drive.Id).FirstOrDefault();
-                if (selectedDrive is not null)
+                if (selectedDrive is not null) 
                 {
-                    drive.IsConnected = true;
+                    drive.IsConnected = selectedDrive.IsConnected;
                     drive.ButtonColor = "#00FF00"; // Green
                 }
                 else
