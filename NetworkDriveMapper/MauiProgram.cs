@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Logging;
 
 namespace NetworkDriveMapper;
 
@@ -22,6 +23,7 @@ public static class MauiProgram
         // Services
         builder.Services.AddSingleton<IDriveService, DriveService>();
         builder.Services.AddSingleton<INetUseService, NetUseService>();
+        builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
         // View Models
         builder.Services.AddSingleton<DrivesViewModel>();

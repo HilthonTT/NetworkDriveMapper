@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System.Windows.Input;
 
 namespace NetworkDriveMapper.ViewModels;
 
@@ -377,5 +378,37 @@ public partial class DrivesViewModel : BaseViewModel
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+
+    public ICommand PageAppearingCommand => new Command(async() =>  await GetPopulateList());
+
+    private async Task GetPopulateList()
+    {
+        if (Drives.Count > 0)
+        {
+            var drives = await _driveService.GetDriveList();
+            var driveList = new List<DriveModel>();
+            var AllDrives = new List<DriveModel>();
+
+            foreach (var d in Drives)
+            {
+                driveList.Add(d);
+            }
+
+            Drives.Clear();
+
+            foreach (var drive in drives)
+            {
+                var selectedDrive = driveList.Where(d => d.Id == drive.Id).FirstOrDefault();
+                if (selectedDrive is not null)
+                {
+                    drive.IsConnected = true;
+                    drive.ButtonColor = "#00FF00"; // Green
+                }
+
+                Drives.Add(drive);
+            }
+        }
     }
 }
