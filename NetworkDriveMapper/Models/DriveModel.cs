@@ -2,37 +2,33 @@
 
 namespace NetworkDriveMapper.Models;
 
-public class DriveModel : INotifyPropertyChanged
+public partial class DriveModel : ObservableObject
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string Letter { get; set; }
-    public string Address { get; set; }
-    public string DriveName { get; set; }
-    public string Password { get; set; }
-    public string UserName { get; set; }
-    public bool IsConnected { get; set; } = false;
+
+    [ObservableProperty]
+    private string _letter;
+
+    [ObservableProperty]
+    private string _address;
+
+    [ObservableProperty]
+    private string _driveName;
+
+    [ObservableProperty]
+    private string _password;
+
+    [ObservableProperty]
+    private string _userName;
+
+    [ObservableProperty]
+    private bool _isConnected = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MyButtonColorAsColor))]
 
     private string _buttonColor;
-    public string ButtonColor
-    {
-        get { return _buttonColor; }
-        set 
-        {
-            if (_buttonColor != value)
-            {
-                _buttonColor = value;
-                NotifyPropertyChanged(nameof(ButtonColor));
-                NotifyPropertyChanged(nameof(MyButtonColorAsColor));
-            } 
-        }
-    }
 
     public Color MyButtonColorAsColor => Color.FromArgb(ButtonColor);
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    private void NotifyPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 }
