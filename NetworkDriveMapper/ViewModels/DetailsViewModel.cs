@@ -10,7 +10,6 @@ public partial class DetailsViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Drives))]
     private DriveModel _drive;
 
 
@@ -22,6 +21,8 @@ public partial class DetailsViewModel : BaseViewModel
         if (response == "Delete")
         {
             var deleteReponse = await _driveService.DeleteDrive(drive);
+
+            Drives.Remove(drive);
 
             if (deleteReponse > 0)
                 await Shell.Current.DisplayAlert("Success",
@@ -51,18 +52,7 @@ public partial class DetailsViewModel : BaseViewModel
             var response = await _driveService.UpdateDrive(Drive);
 
             await Shell.Current.DisplayAlert("Drive Updated!",
-                $"Drive {Drive.DriveName} has been updated!", "OK", "Cancel")
-                .ContinueWith(async (result) =>
-                {
-                    if (result.Result)
-                    {
-                        await Shell.Current.Navigation.PopToRootAsync(true);
-                    }
-                    else
-                    {
-                        await Shell.Current.Navigation.PopToRootAsync(true);
-                    }
-                });
+                $"Drive {Drive.DriveName} has been updated!", "OK");
         }
         catch (Exception ex)
         {
