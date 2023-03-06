@@ -8,15 +8,24 @@
              x:DataType="viewModels:AddViewModel"
              ios:Page.UseSafeArea="True"
              Title="{Binding Title}">
-
-    
     <ScrollView>
         <VerticalStackLayout Padding="10"
                              Spacing="10"
                              Margin="20">
 
             <Frame Style="{StaticResource CardView}"
-                       Padding="10">
+                   Margin="0,0,0,20">
+
+                <Label Text="Add A Drive" 
+                       Style="{StaticResource LargeLabel}"
+                       TextTransform="Uppercase"
+                       HorizontalOptions="Center"
+                       Margin="0,20,0,25"/>
+            </Frame>
+            
+            <Frame Style="{StaticResource CardView}"
+                   Padding="10">
+
                 <StackLayout Spacing="15">
 
                     <Label Text="Drive Letter"

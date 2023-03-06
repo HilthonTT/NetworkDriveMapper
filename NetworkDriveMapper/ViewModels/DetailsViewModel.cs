@@ -7,11 +7,11 @@ public partial class DetailsViewModel : BaseViewModel
     public DetailsViewModel(IDriveService driveService)
     {
         _driveService = driveService;
+        Title = "Network Drive Mapper";
     }
 
     [ObservableProperty]
     private DriveModel _drive;
-
 
     [RelayCommand]
     private async Task DisplayActionAsync(DriveModel drive)

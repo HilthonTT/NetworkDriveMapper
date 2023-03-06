@@ -4,10 +4,9 @@ public partial class AddViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
 
-    public AddViewModel(IDriveService driveService, 
-                        DrivesViewModel drivesViewModel)
+    public AddViewModel(IDriveService driveService)
     {
-        Title = "Add a drive";
+        Title = "Network Drive Mapper";
         _driveService = driveService;
     }
 
