@@ -16,8 +16,12 @@
     </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Settings" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToSettingsCommand}"/>
         <ToolbarItem Text="Add A Drive" 
-                     Order="Primary" 
+                     Order="Secondary" 
                      Priority="0"
                      Command="{Binding GoToAddDriveCommand}"/>
     </ContentPage.ToolbarItems>

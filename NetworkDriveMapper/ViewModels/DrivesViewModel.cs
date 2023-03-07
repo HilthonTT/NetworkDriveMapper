@@ -369,6 +369,12 @@ public partial class DrivesViewModel : BaseViewModel
             });
     }
 
+    [RelayCommand]
+    private async Task GoToSettingsAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
+
     /// <summary>
     /// Goes to the AddDrivePage
     /// </summary>

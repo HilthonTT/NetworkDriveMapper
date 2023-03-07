@@ -23,17 +23,20 @@ public static class MauiProgram
         // Services
         builder.Services.AddSingleton<IDriveService, DriveService>();
         builder.Services.AddSingleton<INetUseService, NetUseService>();
+        builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
         // View Models
         builder.Services.AddSingleton<DrivesViewModel>();
         builder.Services.AddTransient<DetailsViewModel>();
         builder.Services.AddTransient<AddViewModel>();
+        builder.Services.AddTransient<SettingsViewModel>();
 
         // Views Registration
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddTransient<DetailsPage>();
         builder.Services.AddTransient<AddDrivePage>();
+        builder.Services.AddTransient<SettingsPage>();
 
         return builder.Build();
     }
