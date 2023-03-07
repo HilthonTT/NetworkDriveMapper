@@ -24,6 +24,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDriveService, DriveService>();
         builder.Services.AddSingleton<INetUseService, NetUseService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
+        builder.Services.AddSingleton<IloggedInAppSettings, loggedInAppSettings>();
+        
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
         // View Models
