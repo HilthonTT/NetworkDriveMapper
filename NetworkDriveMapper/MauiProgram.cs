@@ -22,7 +22,7 @@ public static class MauiProgram
 
         // Services
         builder.Services.AddSingleton<IDriveService, DriveService>();
-        builder.Services.AddSingleton<INetUseService, NetUseService>();
+        builder.Services.AddSingleton<IDriveMapperService, DriveMapperService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.Services.AddSingleton<ILoggedInAppSettings, LoggedInAppSettings>();
         

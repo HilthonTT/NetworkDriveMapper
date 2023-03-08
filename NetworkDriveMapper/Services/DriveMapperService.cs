@@ -1,6 +1,6 @@
 ﻿namespace NetworkDriveMapper.Services;
 
-public class NetUseService : INetUseService
+public class DriveMapperService : IDriveMapperService
 {
     public string ErrorMessage = "";
 

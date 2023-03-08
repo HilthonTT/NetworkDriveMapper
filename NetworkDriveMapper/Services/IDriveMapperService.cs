@@ -1,6 +1,6 @@
 ﻿namespace NetworkDriveMapper.Services
 {
-    public interface INetUseService
+    public interface IDriveMapperService
     {
         Task ConnectDriveAsync(DriveModel drive);
         Task ConnectDriveMacOSAsync(DriveModel drive);

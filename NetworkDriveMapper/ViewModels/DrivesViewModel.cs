@@ -6,18 +6,18 @@ namespace NetworkDriveMapper.ViewModels;
 public partial class DrivesViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
-    private readonly INetUseService _netUseService;
+    private readonly IDriveMapperService _driveMapperService;
     private readonly IAppSettingsService _appSettingsService;
     private readonly ILoggedInAppSettings _settings;
 
     public DrivesViewModel(IDriveService driveService, 
-                            INetUseService netUseService,
+                            IDriveMapperService driveMapperService,
                             IAppSettingsService appSettingsService,
                             ILoggedInAppSettings settings)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
-        _netUseService = netUseService;
+        _driveMapperService = driveMapperService;
         _appSettingsService = appSettingsService;
         _settings = settings;
     }
@@ -78,8 +78,8 @@ public partial class DrivesViewModel : BaseViewModel
                     {
                         if (drive.IsConnected == false)
                         {
-                            await _netUseService.ConnectDriveAsync(drive);
-                            if (_netUseService.IsError() == false)
+                            await _driveMapperService.ConnectDriveAsync(drive);
+                            if (_driveMapperService.IsError() == false)
                             {
                                 ConnectedDrives.Add(drive);
                                 drive.ButtonColor = "#00FF00"; // Green
@@ -100,8 +100,8 @@ public partial class DrivesViewModel : BaseViewModel
                     {
                         if (drive.IsConnected == false)
                         {
-                            await _netUseService.ConnectDriveMacOSAsync(drive);
-                            if (_netUseService.IsError() == false)
+                            await _driveMapperService.ConnectDriveMacOSAsync(drive);
+                            if (_driveMapperService.IsError() == false)
                             {
                                 ConnectedDrives.Add(drive);
                                 drive.ButtonColor = "#00FF00"; // Green
@@ -159,8 +159,8 @@ public partial class DrivesViewModel : BaseViewModel
                 {        
                     if (drive.IsConnected == false)
                     {
-                        await _netUseService.ConnectDriveAsync(drive);
-                        if (_netUseService.IsError() == false)
+                        await _driveMapperService.ConnectDriveAsync(drive);
+                        if (_driveMapperService.IsError() == false)
                         {
                             ConnectedDrives.Add(drive);
                             drive.ButtonColor = "#00FF00"; // Green
@@ -183,8 +183,8 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     if (drive.IsConnected == false)
                     {
-                        await _netUseService.ConnectDriveMacOSAsync(drive);
-                        if (_netUseService.IsError() == false)
+                        await _driveMapperService.ConnectDriveMacOSAsync(drive);
+                        if (_driveMapperService.IsError() == false)
                         {
                             ConnectedDrives.Add(drive);
                             drive.ButtonColor = "#00FF00"; // Green
@@ -231,7 +231,7 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     if (drive.IsConnected)
                     {
-                        await _netUseService.DisconnectDrivesAsync(drive);
+                        await _driveMapperService.DisconnectDrivesAsync(drive);
                         drive.ButtonColor = "#FF0000"; // Red
                         drive.IsConnected = false;
                         ConnectedDrives.Remove(drive);
@@ -244,7 +244,7 @@ public partial class DrivesViewModel : BaseViewModel
                 {
                     if (drive.IsConnected)
                     {
-                        await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                        await _driveMapperService.DisconnectDrivesMacOSAsync(drive);
                         drive.ButtonColor = "#FF0000"; // Red
                         drive.IsConnected = false;
                         ConnectedDrives.Remove(drive);
@@ -271,8 +271,8 @@ public partial class DrivesViewModel : BaseViewModel
                 
                 if (drive.IsConnected == false)
                 {
-                    await _netUseService.ConnectDriveAsync(drive);
-                    if (_netUseService.IsError() == false)
+                    await _driveMapperService.ConnectDriveAsync(drive);
+                    if (_driveMapperService.IsError() == false)
                     {
                         ConnectedDrives.Add(drive);
                         drive.ButtonColor = "#00FF00"; // Green
@@ -295,7 +295,7 @@ public partial class DrivesViewModel : BaseViewModel
             {   
                 if (drive.IsConnected == false)
                 {
-                    await _netUseService.ConnectDriveMacOSAsync(drive);
+                    await _driveMapperService.ConnectDriveMacOSAsync(drive);
                     ConnectedDrives.Add(drive);
                     float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                     DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
@@ -329,7 +329,7 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 if (drive.IsConnected)
                 {
-                    await _netUseService.DisconnectDrivesAsync(drive);
+                    await _driveMapperService.DisconnectDrivesAsync(drive);
                     ConnectedDrives.Remove(drive);
                     float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                     DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
@@ -348,7 +348,7 @@ public partial class DrivesViewModel : BaseViewModel
             { 
                 if (drive.IsConnected)
                 {
-                    await _netUseService.DisconnectDrivesMacOSAsync(drive);
+                    await _driveMapperService.DisconnectDrivesMacOSAsync(drive);
                     ConnectedDrives.Remove(drive);
                     float numberOfConnectedDrives = (float)ConnectedDrives.Count;
                     DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
@@ -442,5 +442,10 @@ public partial class DrivesViewModel : BaseViewModel
                 Drives.Add(drive);
             }
         }
+    }
+
+    private List<DriveModel> Lol(List<DriveModel> drives)
+    {
+        return drives;
     }
 }
