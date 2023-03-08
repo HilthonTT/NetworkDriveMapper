@@ -27,7 +27,9 @@
             <Frame Style="{StaticResource CardView}"
                    Padding="10">
 
-                <Grid ColumnDefinitions="*,*">
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="*,*,Auto"
+                      Padding="10">
                     <StackLayout Spacing="15"
                                  Grid.Column="0">
 
@@ -38,8 +40,21 @@
                     <StackLayout Spacing="15"
                                  Grid.Column="1">
 
-                        <Button BackgroundColor="{Binding Settings.AutoConnectColorAsColor}"/>
+                        <Button HeightRequest="50"
+                                CornerRadius="20"
+                                Margin="45,0,2,0"
+                                BackgroundColor="{Binding Settings.AutoConnectColorAsColor}"
+                                Command="{Binding ChangeValueAutoConnectCommand}"/>
 
+                    </StackLayout>
+
+                    <StackLayout Grid.Row="1"
+                                 Grid.ColumnSpan="2"
+                                 Grid.RowSpan="2"
+                                 Margin="0,20,0,20">
+                        <Button Text="Save Settings"
+                                Style="{StaticResource ButtonOutline}"
+                                Command="{Binding SaveSettingsCommand}"/>
                     </StackLayout>
                 </Grid>
             </Frame>

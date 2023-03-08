@@ -49,7 +49,14 @@ public partial class DrivesViewModel : BaseViewModel
             IsBusy = true;
 
             var settings = await _appSettingsService.GetSettings().WaitAsync(new CancellationToken());
-            _settings.AutoConnectOnStartUp = settings.AutoConnectOnStartUp;
+            if (settings is not null)
+            {
+                _settings.AutoConnectOnStartUp = settings.AutoConnectOnStartUp;
+            }
+            else
+            {
+                _settings.AutoConnectOnStartUp = true;
+            }
 
             var drives = await _driveService.GetDriveList();
 
@@ -59,6 +66,7 @@ public partial class DrivesViewModel : BaseViewModel
             foreach (var drive in drives)
             {
                 drive.IsConnected = false;
+                drive.ButtonColor = "#FF0000"; // Red
                 Drives.Add(drive);       
             }
 
@@ -114,7 +122,6 @@ public partial class DrivesViewModel : BaseViewModel
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex);
             await Shell.Current.DisplayAlert("Error!",
                 $"Unable to get drives: {ex.Message}", "OK");
         }

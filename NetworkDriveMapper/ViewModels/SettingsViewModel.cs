@@ -33,8 +33,7 @@ public partial class SettingsViewModel : BaseViewModel
             {
                 var appSettings = new AppSettings
                 {
-                    AutoConnectOnStartUp = true,
-                    AutoMinimizeAfterConnect = false,
+                    AutoConnectOnStartUp = true
                 };
 
                 await _appSettingsService.InsertSettings(appSettings);
@@ -45,6 +44,15 @@ public partial class SettingsViewModel : BaseViewModel
             {
                 Settings = settings;
             }
+
+            if (Settings.AutoConnectOnStartUp is true)
+            {
+                Settings.AutoConnectButtonColor = "#00FF00"; // Green
+            }
+            else
+            {
+                Settings.AutoConnectButtonColor = "#FF0000"; // Red
+            }
         }
         catch (Exception ex)
         {
@@ -54,6 +62,45 @@ public partial class SettingsViewModel : BaseViewModel
         finally
         {
             IsBusy = false;
+        }
+    }
+
+    [RelayCommand]
+    private void ChangeValueAutoConnect()
+    {
+        Settings.AutoConnectOnStartUp = !Settings.AutoConnectOnStartUp;
+        if (Settings.AutoConnectOnStartUp is true)
+        {
+            Settings.AutoConnectButtonColor = "#00FF00"; // Green
+        }
+        else
+        {
+            Settings.AutoConnectButtonColor = "#FF0000"; // Red
+        }
+    }
+
+    [RelayCommand]
+    private async Task SaveSettings()
+    {
+        try
+        {
+            var response = await _appSettingsService.SaveSettings(Settings);
+
+            if (response > 0)
+            {
+                await Shell.Current.DisplayAlert("Success!",
+                    $"The Settings were saved!", "OK");
+            }
+            else
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    $"Unable to save settings", "OK");
+            }
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error!",
+                $"Unable to save settings: {ex.Message}", "OK");
         }
     }
 }

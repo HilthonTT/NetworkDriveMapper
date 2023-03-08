@@ -16,9 +16,9 @@ public class AppSettingsService : IAppSettingsService
         if (_dbConnection is null)
         {
             string dbPath = Path.Combine(
-                Environment.GetFolderPath(
-                    Environment.SpecialFolder.LocalApplicationData), 
-                        "AppSettings.db3");
+               Environment.GetFolderPath(
+                   Environment.SpecialFolder.LocalApplicationData),
+                       "AppSettings.db3");
             _dbConnection = new SQLiteAsyncConnection(dbPath);
             _dbConnection.CreateTableAsync<AppSettings>();
         }
