@@ -3,13 +3,11 @@
 public partial class MainPage : ContentPage
 {
     private readonly DrivesViewModel _viewModel;
-    private readonly IDriveService _driveService;
 
-    public MainPage(DrivesViewModel viewModel, IDriveService driveService)
+    public MainPage(DrivesViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;
-        _driveService = driveService;
         BindingContext = viewModel;
     }
 

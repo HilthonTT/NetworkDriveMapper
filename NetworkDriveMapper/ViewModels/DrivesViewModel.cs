@@ -1,5 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
+using Microsoft.Maui;
 
 namespace NetworkDriveMapper.ViewModels;
 
@@ -7,12 +7,19 @@ public partial class DrivesViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
     private readonly INetUseService _netUseService;
+    private readonly IAppSettingsService _appSettingsService;
+    private readonly ILoggedInAppSettings _settings;
 
-    public DrivesViewModel(IDriveService driveService, INetUseService netUseService)
+    public DrivesViewModel(IDriveService driveService, 
+                            INetUseService netUseService,
+                            IAppSettingsService appSettingsService,
+                            ILoggedInAppSettings settings)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
         _netUseService = netUseService;
+        _appSettingsService = appSettingsService;
+        _settings = settings;
     }
 
     [ObservableProperty]
@@ -41,6 +48,9 @@ public partial class DrivesViewModel : BaseViewModel
         {
             IsBusy = true;
 
+            var settings = await _appSettingsService.GetSettings().WaitAsync(new CancellationToken());
+            _settings.AutoConnectOnStartUp = settings.AutoConnectOnStartUp;
+
             var drives = await _driveService.GetDriveList();
 
             if (Drives.Count != 0)
@@ -52,52 +62,55 @@ public partial class DrivesViewModel : BaseViewModel
                 Drives.Add(drive);       
             }
 
-            if (OperatingSystem.IsWindows())
+            if (_settings.AutoConnectOnStartUp)
             {
-                foreach (var drive in Drives)
+                if (OperatingSystem.IsWindows())
                 {
-                    if (drive.IsConnected == false)
+                    foreach (var drive in Drives)
                     {
-                        await _netUseService.ConnectDriveAsync(drive);
-                        if (_netUseService.IsError() == false)
+                        if (drive.IsConnected == false)
                         {
-                            ConnectedDrives.Add(drive);
-                            drive.ButtonColor = "#00FF00"; // Green
+                            await _netUseService.ConnectDriveAsync(drive);
+                            if (_netUseService.IsError() == false)
+                            {
+                                ConnectedDrives.Add(drive);
+                                drive.ButtonColor = "#00FF00"; // Green
+                            }
+                            else
+                            {
+                                drive.ButtonColor = "#FF0000"; // Red
+                            }
+                            float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                            DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
+                            DrivePercentage = DriveProgress / 100;
                         }
-                        else
-                        {
-                            drive.ButtonColor = "#FF0000"; // Red
-                        }
-                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
-                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-                        DrivePercentage = DriveProgress / 100;
                     }
                 }
-            }
-            else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-            {
-                foreach (var drive in Drives)
-                { 
-                    if (drive.IsConnected == false)
+                else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
+                {
+                    foreach (var drive in Drives)
                     {
-                        await _netUseService.ConnectDriveMacOSAsync(drive);
-                        if (_netUseService.IsError() == false)
+                        if (drive.IsConnected == false)
                         {
-                            ConnectedDrives.Add(drive);
-                            drive.ButtonColor = "#00FF00"; // Green
+                            await _netUseService.ConnectDriveMacOSAsync(drive);
+                            if (_netUseService.IsError() == false)
+                            {
+                                ConnectedDrives.Add(drive);
+                                drive.ButtonColor = "#00FF00"; // Green
+                            }
+                            else
+                            {
+                                drive.ButtonColor = "#FF0000"; // Red
+                            }
+                            float numberOfConnectedDrives = (float)ConnectedDrives.Count;
+                            DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
+                            DrivePercentage = DriveProgress / 100;
                         }
-                        else
-                        {
-                            drive.ButtonColor = "#FF0000"; // Red
-                        }
-                        float numberOfConnectedDrives = (float)ConnectedDrives.Count;
-                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-                        DrivePercentage = DriveProgress / 100;
                     }
                 }
-            }
 
-            IsConnected = true;
+                IsConnected = true;
+            }  
         }
         catch (Exception ex)
         {

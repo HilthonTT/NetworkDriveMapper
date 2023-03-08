@@ -1,8 +1,6 @@
-﻿namespace NetworkDriveMapper.Models
+﻿namespace NetworkDriveMapper.Models;
+
+public interface ILoggedInAppSettings
 {
-    public interface IloggedInAppSettings
-    {
-        bool AutoConnectOnStartUp { get; set; }
-        bool AutoMinimizeAfterConnect { get; set; }
-    }
+    bool AutoConnectOnStartUp { get; set; }
 }
