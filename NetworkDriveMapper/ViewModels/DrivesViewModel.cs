@@ -163,7 +163,6 @@ public partial class DrivesViewModel : BaseViewModel
 
                     if (_driveMapperService.IsError() == false)
                     {
-                        ConnectedDrives.Add(drive);
                         drive.ButtonColor = Green;
                     }
                     else
@@ -233,6 +232,10 @@ public partial class DrivesViewModel : BaseViewModel
             float numberOfConnectedDrives = (float)ConnectedDrives.Count;
             DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
             DrivePercentage = DriveProgress / 100;
+
+            ConnectedDrives.Remove(drive);
+            drive.ButtonColor = Red;
+            drive.IsConnected = false;
         }
         catch (Exception ex)
         {
@@ -302,12 +305,14 @@ public partial class DrivesViewModel : BaseViewModel
                 var selectedDrive = driveList.Where(d => d.Id == drive.Id).FirstOrDefault();
                 if (selectedDrive is not null) 
                 {
-                    drive.IsConnected = selectedDrive.IsConnected;
-                    drive.ButtonColor = "#00FF00"; // Green
+                    if (selectedDrive.IsConnected)
+                        drive.ButtonColor = Green;
+                    else 
+                        drive.ButtonColor = Red;
                 }
                 else
                 {
-                    drive.ButtonColor = "#FF0000"; // Red
+                    drive.ButtonColor = Red;
                 }
 
                 Drives.Add(drive);
