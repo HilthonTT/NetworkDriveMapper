@@ -82,4 +82,16 @@ public partial class AddViewModel : BaseViewModel
                 $"Unable to add drive: {ex.Message}", "OK");
         }
     }
+
+    [RelayCommand]
+    private async Task GoToSettingsAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToRootAsync()
+    {
+        await Shell.Current.Navigation.PopToRootAsync();
+    }
 }

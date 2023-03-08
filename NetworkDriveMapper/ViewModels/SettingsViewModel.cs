@@ -103,4 +103,16 @@ public partial class SettingsViewModel : BaseViewModel
                 $"Unable to save settings: {ex.Message}", "OK");
         }
     }
+
+    [RelayCommand]
+    private async Task GoToAddDriveAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToRootAsync()
+    {
+        await Shell.Current.Navigation.PopToRootAsync();
+    }
 }

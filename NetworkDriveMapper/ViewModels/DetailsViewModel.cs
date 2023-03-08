@@ -60,4 +60,23 @@ public partial class DetailsViewModel : BaseViewModel
                 $"Unable to update drive: {ex.Message}", "OK");
         }
     }
+
+    [RelayCommand]
+    private async Task GoToDetailsAsync(DriveModel drive)
+    {
+        if (drive is null)
+            return;
+
+        await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
+            new Dictionary<string, object>
+            {
+                { "Drive", drive }
+            });
+    }
+
+    [RelayCommand]
+    private async Task GoToSettingsAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
 }

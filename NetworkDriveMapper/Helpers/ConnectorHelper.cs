@@ -1,6 +1,6 @@
 ﻿namespace NetworkDriveMapper.Helpers;
 
-public class ConnectorHelper
+public class ConnectorHelper : IConnectorHelper
 {
     private readonly IAppSettingsService _appSettingsService;
     private readonly ILoggedInAppSettings _settings;
@@ -21,56 +21,9 @@ public class ConnectorHelper
         _driveService = driveService;
         _driveMapperService = driveMapperService;
     }
-    
-    public async Task ConnectDrivesAsync(ObservableCollection<DriveModel> driveList, 
-                                         ObservableCollection<DriveModel> connectedDrives)
-    {
-        var settings = await _appSettingsService.GetSettings();
-
-        _settings.AutoConnectOnStartUp = settings is not null ? settings.AutoConnectOnStartUp : true;
-
-        var drives = await _driveService.GetDriveList();
-
-        if (driveList.Count != 0)
-            driveList.Clear();
-
-        foreach (var drive in drives)
-        {
-            drive.IsConnected = false;
-            drive.ButtonColor = Green;
-            driveList.Add(drive);
-        }
-
-        if (_settings.AutoConnectOnStartUp)
-        {
-            foreach (var drive in driveList)
-            {
-                if (drive.IsConnected is false)
-                {
-                    if (OperatingSystem.IsWindows())
-                        await _driveMapperService.ConnectDriveAsync(drive);
-                    else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-                        await _driveMapperService.ConnectDriveMacOSAsync(drive);
-                    else
-                        await Shell.Current.DisplayAlert("Error!",
-                            ErrorMessage, "OK");
-                    
-                    if (_driveMapperService.IsError() == false)
-                    {
-                        connectedDrives.Add(drive);
-                        drive.ButtonColor = Green;
-                    }
-                    else
-                    {
-                        drive.ButtonColor = Red;
-                    }
-                }
-            }
-        }
-    }
 
     public async Task DisconnectDrivesAsync(ObservableCollection<DriveModel> drives,
-                                            ObservableCollection<DriveModel> connectedDrives)
+                                            List<DriveModel> connectedDrives)
     {
         foreach (var drive in drives)
         {
@@ -91,7 +44,7 @@ public class ConnectorHelper
     }
 
     public async Task ConnectSingularDriveAsync(DriveModel drive,
-                                                ObservableCollection<DriveModel> connectedDrives)
+                                                List<DriveModel> connectedDrives)
     {
         if (drive.IsConnected is false)
         {
@@ -106,17 +59,24 @@ public class ConnectorHelper
             if (_driveMapperService.IsError() == false)
             {
                 drive.ButtonColor = Green;
+                drive.IsConnected = true;
                 connectedDrives.Add(drive);
             }
             else
             {
                 drive.ButtonColor = Red;
+                drive.IsConnected = false;
             }
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Warning!",
+                $"Drive {drive.Letter} is already mounted.", "OK");
         }
     }
 
     public async Task DisconnectSingularDriveAsync(DriveModel drive,
-                                                   ObservableCollection<DriveModel> connectedDrives)
+                                                   List<DriveModel> connectedDrives)
     {
         if (drive.IsConnected)
         {
@@ -129,9 +89,13 @@ public class ConnectorHelper
                     ErrorMessage, "OK");
 
             connectedDrives.Remove(drive);
+            drive.IsConnected = false;
+            drive.ButtonColor = Red;
+        }
+        else
+        {
+            await Shell.Current.DisplayAlert("Warning!",
+                $"Drive {drive.Letter} is already unmounted.", "OK");
         }
     }
-
-
-
 }

@@ -8,6 +8,18 @@
              x:DataType="viewModels:AddViewModel"
              ios:Page.UseSafeArea="True"
              Title="{Binding Title}">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToRootCommand}"/>
+        <ToolbarItem Text="Settings" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToSettingsCommand}"/>
+    </ContentPage.ToolbarItems>
+    
     <ScrollView>
         <VerticalStackLayout Padding="10"
                              Spacing="10"

@@ -6,6 +6,10 @@ public partial class BaseViewModel : ObservableObject
     {
     }
 
+    public const string Red = "#FF0000";
+    public const string Green = "#00FF00";
+    public const string ErrorMessage = "Your platform is unsupported";
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsNotBusy))]
     private bool _isBusy;

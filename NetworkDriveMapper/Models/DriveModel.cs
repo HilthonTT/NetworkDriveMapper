@@ -39,7 +39,7 @@ public partial class DriveModel : ObservableValidator
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MyButtonColorAsColor))]
 
-    private string _buttonColor;
+    private string _buttonColor = "#FF0000";
 
     public Color MyButtonColorAsColor => Color.FromArgb(ButtonColor);
 }

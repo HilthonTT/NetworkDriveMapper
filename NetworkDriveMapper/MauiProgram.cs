@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using NetworkDriveMapper.Helpers;
 
 namespace NetworkDriveMapper;
 
@@ -25,6 +26,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDriveMapperService, DriveMapperService>();
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.Services.AddSingleton<ILoggedInAppSettings, LoggedInAppSettings>();
+        builder.Services.AddSingleton<IConnectorHelper, ConnectorHelper>();
         
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 
