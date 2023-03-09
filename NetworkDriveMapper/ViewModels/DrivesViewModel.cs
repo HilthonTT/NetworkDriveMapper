@@ -174,9 +174,6 @@ public partial class DrivesViewModel : BaseViewModel
         {
             await _connectorHelper.DisconnectDriveAsync(drive, ConnectedDrives);
             RecalculateProgressbar();
-
-            ConnectedDrives.Remove(drive);
-            SetPropertyToDisconnected(drive);
         }
         catch (Exception ex)
         {
