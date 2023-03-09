@@ -1,6 +1,4 @@
-﻿using System.Windows.Input;
-using Microsoft.Maui;
-using NetworkDriveMapper.Helpers;
+﻿using NetworkDriveMapper.Helpers;
 
 namespace NetworkDriveMapper.ViewModels;
 
@@ -32,18 +30,13 @@ public partial class DrivesViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isConnected;
 
+    [ObservableProperty]
     private string _searchText;
 
-    public string SearchText
+    partial void OnSearchTextChanged(string value)
     {
-        get { return _searchText; }
-        set 
-        {
-            SetProperty(ref _searchText, value);
-            FilterDrives();
-        }
+        FilterDrives();
     }
-
 
     [ObservableProperty]
     private float _driveProgress; // Progress Label, shows the percentage in number
@@ -52,7 +45,9 @@ public partial class DrivesViewModel : BaseViewModel
     private float _drivePercentage; // The progress bar percentage, changes the progress bar's length.
 
     /// <summary>
-    /// The method gets all the drives in the Table and then tries to map them all using the Process.
+    /// This method is called on startup.
+    /// It checks if the setting is set to AutoConnect,
+    /// if it is, connect the drives if not don't.
     /// </summary>
     /// <returns></returns>
     [RelayCommand]
@@ -77,8 +72,7 @@ public partial class DrivesViewModel : BaseViewModel
 
             foreach (var drive in drives)
             {
-                drive.IsConnected = false;
-                drive.ButtonColor = Red;
+                SetPropertyToDisconnected(drive);
                 Drives.Add(drive);
             }
 
@@ -89,34 +83,9 @@ public partial class DrivesViewModel : BaseViewModel
                 foreach (var drive in Drives)
                 {
                     if (drive.IsConnected is false)
-                    {
-                        if (OperatingSystem.IsWindows())
-                        {
-                            await _driveMapperService.ConnectDriveAsync(drive);
-                        }
-                            
-                        else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-                        {
-                            await _driveMapperService.ConnectDriveMacOSAsync(drive);
-                        }    
-                        else
-                            await Shell.Current.DisplayAlert("Error!",
-                                ErrorMessage, "OK");
+                        await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
 
-                        if (_driveMapperService.IsError() == false)
-                        {
-                            drive.ButtonColor = Green;
-                            ConnectedDrives.Add(drive);
-                        }
-                        else
-                        {
-                            drive.ButtonColor = Red;
-                        }
-
-                        float numberOfConnectedDrives = ConnectedDrives.Count;
-                        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-                        DrivePercentage = DriveProgress / 100;
-                    }
+                    RecalculateProgressbar();
                 }
             } 
         }
@@ -132,11 +101,6 @@ public partial class DrivesViewModel : BaseViewModel
         }
     }
 
-    /// <summary>
-    /// Maps all the drives. 
-    /// Checks if the user's OS is windows or is MacOS since their mapping commands are different.
-    /// </summary>
-    /// <returns></returns>
     [RelayCommand]
     private async Task ConnectAllDrivesAsync()
     {
@@ -156,39 +120,9 @@ public partial class DrivesViewModel : BaseViewModel
             foreach (var drive in Drives)
             {
                 if (drive.IsConnected is false)
-                {
-                    if (OperatingSystem.IsWindows())
-                    {
-                        await _driveMapperService.ConnectDriveAsync(drive);
-                        drive.IsConnected = true;
-                        drive.ButtonColor = Green;
-                        ConnectedDrives.Add(drive);
-                    }
+                    await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
 
-                    else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-                    {
-                        await _driveMapperService.ConnectDriveMacOSAsync(drive);
-                        drive.IsConnected = true;
-                        drive.ButtonColor = Green;
-                        ConnectedDrives.Add(drive);
-                    }
-                    else
-                        await Shell.Current.DisplayAlert("Error!",
-                           ErrorMessage, "OK");
-
-                    if (_driveMapperService.IsError() == false)
-                    {
-                        drive.ButtonColor = Green;
-                    }
-                    else
-                    {
-                        drive.ButtonColor = Red;
-                    }
-
-                    float numberOfConnectedDrives = ConnectedDrives.Count;
-                    DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-                    DrivePercentage = DriveProgress / 100;
-                }
+                RecalculateProgressbar();
             }
         }
         catch (Exception ex)
@@ -198,21 +132,18 @@ public partial class DrivesViewModel : BaseViewModel
         }
     }
 
-    /// <summary>
-    /// Disconnects all mounted drives.
-    /// It checks for the OS, do this it's windows and do this if it's MacOS
-    /// </summary>
-    /// <returns></returns>
-
     [RelayCommand]
     private async Task DisconnectAllDrivesAsync()
     {
         try
         {
-            DriveProgress = 0;
-            DrivePercentage = 0;
+            foreach (var drive in Drives)
+            {
+                if (drive.IsConnected)
+                    await _connectorHelper.DisconnectDriveAsync(drive, ConnectedDrives);
 
-            await _connectorHelper.DisconnectDrivesAsync(Drives, ConnectedDrives);
+                RecalculateProgressbar();
+            } 
         }
         catch (Exception ex)
         {
@@ -226,10 +157,8 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            await _connectorHelper.ConnectSingularDriveAsync(drive, ConnectedDrives);
-            float numberOfConnectedDrives = (float)ConnectedDrives.Count;
-            DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-            DrivePercentage = DriveProgress / 100;
+            await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
+            RecalculateProgressbar();
         }
         catch (Exception ex)
         {
@@ -243,14 +172,11 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            await _connectorHelper.DisconnectSingularDriveAsync(drive, ConnectedDrives);
-            float numberOfConnectedDrives = (float)ConnectedDrives.Count;
-            DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
-            DrivePercentage = DriveProgress / 100;
+            await _connectorHelper.DisconnectDriveAsync(drive, ConnectedDrives);
+            RecalculateProgressbar();
 
             ConnectedDrives.Remove(drive);
-            drive.ButtonColor = Red;
-            drive.IsConnected = false;
+            SetPropertyToDisconnected(drive);
         }
         catch (Exception ex)
         {
@@ -258,12 +184,6 @@ public partial class DrivesViewModel : BaseViewModel
                     $"Unable to disconnect drive: {ex.Message}", "OK");
         }
     }
-
-    /// <summary>
-    /// Views the detail of the drives, IP Address, Drive Letter, userName.
-    /// </summary>
-    /// <param name="drive"></param>
-    /// <returns></returns>
 
     [RelayCommand]
     private async Task GoToDetailsAsync(DriveModel drive)
@@ -284,35 +204,34 @@ public partial class DrivesViewModel : BaseViewModel
         await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
     }
 
-    /// <summary>
-    /// Goes to the AddDrivePage
-    /// </summary>
-    /// <returns></returns>
-
     [RelayCommand]
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
     }
 
-
-    public ICommand PageAppearingCommand => new Command(async() =>  await GetPopulateList());
-
-    private async Task GetPopulateList()
+    /// <summary>
+    /// This method basically reloads the Drives List on the main page
+    /// to see if there were any modification
+    /// </summary>
+    /// <returns></returns>
+    [RelayCommand]
+    private async Task PageAppearingAsync()
     {
-        if (Drives.Count > 0)
+        var drives = await _driveService.GetDriveList();
+        if (Drives.Count != drives.Count)
         {
-            var drives = await _driveService.GetDriveList();
             var driveList = new List<DriveModel>();
 
             // Adds each drive into the driveList that was in Drive before clearing it.
-            // To check if it was connected or not.
+            // To check if it was connected or not in the later lines.
             foreach (var d in Drives) 
             {
                 driveList.Add(d);
             }
 
             Drives.Clear();
+            FilteredDrives.Clear();
 
             // Checks if the drive was in the driveList, if it was, put the value its IsConnected previous value.
             foreach (var drive in drives)
@@ -321,16 +240,17 @@ public partial class DrivesViewModel : BaseViewModel
                 if (selectedDrive is not null) 
                 {
                     if (selectedDrive.IsConnected)
-                        drive.ButtonColor = Green;
+                        SetPropertyToConnected(drive);
                     else 
-                        drive.ButtonColor = Red;
+                        SetPropertyToDisconnected(drive);
                 }
                 else
                 {
-                    drive.ButtonColor = Red;
+                    SetPropertyToDisconnected(drive);
                 }
 
                 Drives.Add(drive);
+                FilteredDrives.Add(drive);
             }
         }
     }
@@ -342,12 +262,10 @@ public partial class DrivesViewModel : BaseViewModel
         {
             foreach (var drive in Drives)
             {
-
                 if (drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
                 {
                     FilteredDrives.Add(drive);
                 }
-
             }
         }
         else
@@ -357,5 +275,24 @@ public partial class DrivesViewModel : BaseViewModel
                 FilteredDrives.Add(drive);
             }
         }
+    }
+
+    private void RecalculateProgressbar()
+    {
+        float numberOfConnectedDrives = ConnectedDrives.Count;
+        DriveProgress = (numberOfConnectedDrives / Drives.Count) * 100;
+        DrivePercentage = DriveProgress / 100;
+    }
+
+    private void SetPropertyToConnected(DriveModel drive)
+    {
+        drive.ButtonColor = Green;
+        drive.IsConnected = true;
+    }
+
+    private void SetPropertyToDisconnected(DriveModel drive)
+    {
+        drive.ButtonColor = Red;
+        drive.IsConnected = false;
     }
 }

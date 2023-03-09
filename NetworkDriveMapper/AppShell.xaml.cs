@@ -19,7 +19,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
     }
 
-    public void SetWinNoResizable()
+    private void SetWinNoResizable()
     {
         Microsoft.Maui.Handlers.WindowHandler.Mapper.AppendToMapping(nameof(IWindow),
                                                                     (handler, view) =>

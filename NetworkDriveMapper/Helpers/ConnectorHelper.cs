@@ -2,49 +2,18 @@
 
 public class ConnectorHelper : IConnectorHelper
 {
-    private readonly IAppSettingsService _appSettingsService;
-    private readonly ILoggedInAppSettings _settings;
-    private readonly IDriveService _driveService;
     private readonly IDriveMapperService _driveMapperService;
 
     private const string Red = "#FF0000";
     private const string Green = "#00FF00";
     private const string ErrorMessage = "Your platform is unsupported";
 
-    public ConnectorHelper(IAppSettingsService appSettingsService,
-                           ILoggedInAppSettings settings,
-                           IDriveService driveService,
-                           IDriveMapperService driveMapperService)
+    public ConnectorHelper(IDriveMapperService driveMapperService)
     {
-        _appSettingsService = appSettingsService;
-        _settings = settings;
-        _driveService = driveService;
         _driveMapperService = driveMapperService;
     }
 
-    public async Task DisconnectDrivesAsync(ObservableCollection<DriveModel> drives,
-                                            List<DriveModel> connectedDrives)
-    {
-        foreach (var drive in drives)
-        {
-            if (drive.IsConnected)
-            {
-                if (OperatingSystem.IsWindows())
-                    await _driveMapperService.DisconnectDrivesAsync(drive);
-                else if (OperatingSystem.IsMacOS() || OperatingSystem.IsMacCatalyst())
-                    await _driveMapperService.DisconnectDrivesMacOSAsync(drive);
-                else
-                    await Shell.Current.DisplayAlert("Error!",
-                        ErrorMessage, "OK");
-                drive.ButtonColor = Red;
-                drive.IsConnected = false;
-                connectedDrives.Remove(drive);
-            }
-        }
-    }
-
-    public async Task ConnectSingularDriveAsync(DriveModel drive,
-                                                List<DriveModel> connectedDrives)
+    public async Task ConnectDriveAsync(DriveModel drive, List<DriveModel> connectedDrives)
     {
         if (drive.IsConnected is false)
         {
@@ -58,14 +27,12 @@ public class ConnectorHelper : IConnectorHelper
 
             if (_driveMapperService.IsError() == false)
             {
-                drive.ButtonColor = Green;
-                drive.IsConnected = true;
+                SetPropertyToConnected(drive);
                 connectedDrives.Add(drive);
             }
             else
             {
-                drive.ButtonColor = Red;
-                drive.IsConnected = false;
+                SetPropertyToDisconnected(drive);
             }
         }
         else
@@ -75,8 +42,7 @@ public class ConnectorHelper : IConnectorHelper
         }
     }
 
-    public async Task DisconnectSingularDriveAsync(DriveModel drive,
-                                                   List<DriveModel> connectedDrives)
+    public async Task DisconnectDriveAsync(DriveModel drive, List<DriveModel> connectedDrives)
     {
         if (drive.IsConnected)
         {
@@ -89,13 +55,24 @@ public class ConnectorHelper : IConnectorHelper
                     ErrorMessage, "OK");
 
             connectedDrives.Remove(drive);
-            drive.IsConnected = false;
-            drive.ButtonColor = Red;
+            SetPropertyToDisconnected(drive);
         }
         else
         {
             await Shell.Current.DisplayAlert("Warning!",
                 $"Drive {drive.Letter} is already unmounted.", "OK");
         }
+    }
+
+    private void SetPropertyToConnected(DriveModel drive)
+    {
+        drive.ButtonColor = Green;
+        drive.IsConnected = true;
+    }
+
+    private void SetPropertyToDisconnected(DriveModel drive)
+    {
+        drive.ButtonColor = Red;
+        drive.IsConnected = false;
     }
 }
