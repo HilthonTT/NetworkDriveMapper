@@ -5,20 +5,17 @@ namespace NetworkDriveMapper.ViewModels;
 public partial class DrivesViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
-    private readonly IDriveMapperService _driveMapperService;
     private readonly IAppSettingsService _appSettingsService;
     private readonly ILoggedInAppSettings _settings;
     private readonly IConnectorHelper _connectorHelper;
 
-    public DrivesViewModel(IDriveService driveService, 
-                            IDriveMapperService driveMapperService,
+    public DrivesViewModel(IDriveService driveService,
                             IAppSettingsService appSettingsService,
                             ILoggedInAppSettings settings,
                             IConnectorHelper connectorHelper)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
-        _driveMapperService = driveMapperService;
         _appSettingsService = appSettingsService;
         _settings = settings;
         _connectorHelper = connectorHelper;

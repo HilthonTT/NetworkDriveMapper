@@ -47,11 +47,11 @@ public partial class SettingsViewModel : BaseViewModel
 
             if (Settings.AutoConnectOnStartUp is true)
             {
-                Settings.AutoConnectButtonColor = "#00FF00"; // Green
+                Settings.AutoConnectButtonColor = Green;
             }
             else
             {
-                Settings.AutoConnectButtonColor = "#FF0000"; // Red
+                Settings.AutoConnectButtonColor = Red;
             }
         }
         catch (Exception ex)
@@ -71,11 +71,11 @@ public partial class SettingsViewModel : BaseViewModel
         Settings.AutoConnectOnStartUp = !Settings.AutoConnectOnStartUp;
         if (Settings.AutoConnectOnStartUp is true)
         {
-            Settings.AutoConnectButtonColor = "#00FF00"; // Green
+            Settings.AutoConnectButtonColor = Green;
         }
         else
         {
-            Settings.AutoConnectButtonColor = "#FF0000"; // Red
+            Settings.AutoConnectButtonColor = Red;
         }
     }
 
