@@ -32,6 +32,19 @@ public partial class DrivesViewModel : BaseViewModel
     [ObservableProperty]
     private bool _isConnected;
 
+    private string _searchText;
+
+    public string SearchText
+    {
+        get { return _searchText; }
+        set 
+        {
+            SetProperty(ref _searchText, value);
+            FilterDrives();
+        }
+    }
+
+
     [ObservableProperty]
     private float _driveProgress; // Progress Label, shows the percentage in number
 
@@ -68,6 +81,8 @@ public partial class DrivesViewModel : BaseViewModel
                 drive.ButtonColor = Red;
                 Drives.Add(drive);
             }
+
+            FilteredDrives = new ObservableCollection<DriveModel>(Drives);
 
             if (_settings.AutoConnectOnStartUp)
             {
@@ -316,6 +331,30 @@ public partial class DrivesViewModel : BaseViewModel
                 }
 
                 Drives.Add(drive);
+            }
+        }
+    }
+
+    private void FilterDrives()
+    {
+        FilteredDrives.Clear();
+        if (string.IsNullOrWhiteSpace(SearchText) == false)
+        {
+            foreach (var drive in Drives)
+            {
+
+                if (drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    FilteredDrives.Add(drive);
+                }
+
+            }
+        }
+        else
+        {
+            foreach (var drive in Drives)
+            {
+                FilteredDrives.Add(drive);
             }
         }
     }

@@ -24,4 +24,7 @@ public partial class BaseViewModel : ObservableObject
 
     [ObservableProperty]
     private List<DriveModel> _connectedDrives = new(); // Counts how many drives are connected
+
+    [ObservableProperty]
+    private ObservableCollection<DriveModel> _filteredDrives = new();
 }

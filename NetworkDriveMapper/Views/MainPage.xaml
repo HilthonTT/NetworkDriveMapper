@@ -35,7 +35,7 @@
         <StackLayout Grid.Row="0"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Margin="20, 20, 20, 50">
+                    Margin="20, 20, 20, 10">
 
             <HorizontalStackLayout  HorizontalOptions="Center"
                                     VerticalOptions="Center">
@@ -51,6 +51,14 @@
                     IsVisible="True" 
                     IsEnabled="True"
                     ProgressColor="Green"/>
+
+            <Entry Margin="0,20,0,30"
+                   BackgroundColor="#282828"
+                   TextColor="White"
+                   Placeholder="Search Drive"
+                   PlaceholderColor="White"
+                   FontSize="20"
+                   Text="{Binding SearchText}"/>
         </StackLayout>
 
         <RefreshView Grid.ColumnSpan="2"
@@ -59,7 +67,7 @@
                      IsRefreshing="{Binding IsRefreshing}">
 
             <CollectionView BackgroundColor="Transparent"
-                            ItemsSource="{Binding Drives}"
+                            ItemsSource="{Binding FilteredDrives}"
                             SelectionMode="None">
                 <CollectionView.EmptyView>
                     <StackLayout VerticalOptions="Center"
