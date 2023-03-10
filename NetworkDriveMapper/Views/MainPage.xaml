@@ -64,7 +64,8 @@
         <RefreshView Grid.ColumnSpan="2"
                      Grid.Row="1"
                      Command="{Binding GetDrivesCommand}"
-                     IsRefreshing="{Binding IsRefreshing}">
+                     IsRefreshing="{Binding IsRefreshing}"
+                     HorizontalOptions="Center">
 
             <CollectionView BackgroundColor="Transparent"
                             ItemsSource="{Binding FilteredDrives}"
@@ -89,8 +90,9 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:DriveModel">
                         <Grid Padding="10">
-                            <Frame HeightRequest="175"
-                                   WidthRequest="800"
+                            <Frame MinimumHeightRequest="175"
+                                   MaximumWidthRequest="1000"
+                                   
                                    Padding="10"
                                    Style="{StaticResource CardView}">
                                 <Frame.GestureRecognizers>
@@ -136,7 +138,7 @@
                                                            HorizontalOptions="CenterAndExpand"
                                                            VerticalOptions="CenterAndExpand">
                                         <Button Text="Connect"
-                                                WidthRequest="385"
+                                                WidthRequest="485"
                                                 HorizontalOptions="Center"
                                                 Grid.Row="1"
                                                 Grid.Column="1"
@@ -146,7 +148,7 @@
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=ConnectSingularDriveCommand}"/>
 
                                         <Button Text="Disconnect"
-                                                WidthRequest="385"
+                                                WidthRequest="485"
                                                 HorizontalOptions="Center"
                                                 Grid.Row="1"
                                                 Grid.Column="1"
