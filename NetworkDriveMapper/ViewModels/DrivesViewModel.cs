@@ -249,18 +249,24 @@ public partial class DrivesViewModel : BaseViewModel
         }
     }
 
-    private void FilterDrives()
+    private async Task FilterDrives()
     {
+        if (IsBusy)
+            return;
+
+        IsBusy = true;
         FilteredDrives.Clear();
         if (string.IsNullOrWhiteSpace(SearchText) == false)
         {
-            foreach (var drive in Drives)
+            var filtered = await Task.Run(() =>
+                Drives.Where(drive =>
+                    drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    drive.Letter.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase)));
+
+            foreach (var drive in filtered)
             {
-                if (drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase) ||
-                    drive.Letter.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    FilteredDrives.Add(drive);
-                }
+                FilteredDrives.Add(drive);
+                await Task.Yield();
             }
         }
         else
@@ -268,8 +274,10 @@ public partial class DrivesViewModel : BaseViewModel
             foreach (var drive in Drives)
             {
                 FilteredDrives.Add(drive);
+                await Task.Yield();
             }
         }
+        IsBusy = false;
     }
 
     private void RecalculateProgressbar()
