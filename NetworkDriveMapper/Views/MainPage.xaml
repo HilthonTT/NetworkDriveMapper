@@ -68,6 +68,7 @@
                      HorizontalOptions="Center">
 
             <CollectionView BackgroundColor="Transparent"
+                            MinimumWidthRequest="1200"
                             ItemsSource="{Binding FilteredDrives}"
                             SelectionMode="None">
                 <CollectionView.EmptyView>
@@ -91,8 +92,7 @@
                     <DataTemplate x:DataType="models:DriveModel">
                         <Grid Padding="10">
                             <Frame MinimumHeightRequest="175"
-                                   MaximumWidthRequest="1000"
-                                   
+                                   MaximumWidthRequest="1200"
                                    Padding="10"
                                    Style="{StaticResource CardView}">
                                 <Frame.GestureRecognizers>
@@ -115,16 +115,14 @@
                                     </FlexLayout>
 
                                     <VerticalStackLayout Grid.Column="1"
-                                                         Padding="10"
-                                                         VerticalOptions="Center">
+                                                         Margin="0,22,0,0">
                                         <Label Text="{Binding DriveName}"
-                                               Style="{StaticResource LargeLabel}"/>
+                                           Style="{StaticResource LargeLabel}"/>
                                         <Label Text="{Binding UserName}"
-                                               Style="{StaticResource MediumLabel}"/>
+                                           Style="{StaticResource MediumLabel}"/>
                                     </VerticalStackLayout>
 
                                     <FlexLayout Grid.Column="2">
-
                                         <Frame WidthRequest="50"
                                                HeightRequest="105"
                                                CornerRadius="20"
@@ -134,25 +132,19 @@
                                         </Frame>
                                     </FlexLayout>
 
-                                    <HorizontalStackLayout Grid.Row="1" 
+                                    <HorizontalStackLayout Grid.Row="1"
                                                            HorizontalOptions="CenterAndExpand"
                                                            VerticalOptions="CenterAndExpand">
                                         <Button Text="Connect"
-                                                WidthRequest="485"
-                                                HorizontalOptions="Center"
-                                                Grid.Row="1"
-                                                Grid.Column="1"
                                                 Margin="0,0,5,0"
+                                                WidthRequest="575"
                                                 Style="{StaticResource ButtonOutline}"
                                                 CommandParameter="{Binding .}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=ConnectSingularDriveCommand}"/>
 
                                         <Button Text="Disconnect"
-                                                WidthRequest="485"
-                                                HorizontalOptions="Center"
-                                                Grid.Row="1"
-                                                Grid.Column="1"
                                                 Margin="5,0,0,0"
+                                                WidthRequest="575"
                                                 Style="{StaticResource ButtonOutline}"
                                                 CommandParameter="{Binding .}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=DisconnectSingularDriveCommand}"/>

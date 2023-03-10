@@ -256,7 +256,8 @@ public partial class DrivesViewModel : BaseViewModel
         {
             foreach (var drive in Drives)
             {
-                if (drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
+                if (drive.DriveName.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase) ||
+                    drive.Letter.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase))
                 {
                     FilteredDrives.Add(drive);
                 }
@@ -278,13 +279,13 @@ public partial class DrivesViewModel : BaseViewModel
         DrivePercentage = DriveProgress / 100;
     }
 
-    private void SetPropertyToConnected(DriveModel drive)
+    private static void SetPropertyToConnected(DriveModel drive)
     {
         drive.ButtonColor = Green;
         drive.IsConnected = true;
     }
 
-    private void SetPropertyToDisconnected(DriveModel drive)
+    private static void SetPropertyToDisconnected(DriveModel drive)
     {
         drive.ButtonColor = Red;
         drive.IsConnected = false;
