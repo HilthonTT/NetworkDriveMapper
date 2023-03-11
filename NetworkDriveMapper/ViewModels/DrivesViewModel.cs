@@ -77,13 +77,7 @@ public partial class DrivesViewModel : BaseViewModel
 
             if (_settings.AutoConnectOnStartUp)
             {
-                foreach (var drive in Drives)
-                {
-                    if (drive.IsConnected is false)
-                        await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
-
-                    RecalculateProgressbar();
-                }
+                await ConnectDisconnectedDrivesAsync();
             } 
         }
         catch (Exception ex)
@@ -114,13 +108,7 @@ public partial class DrivesViewModel : BaseViewModel
 
             ConnectedDrives.Clear();
 
-            foreach (var drive in Drives)
-            {
-                if (drive.IsConnected is false)
-                    await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
-
-                RecalculateProgressbar();
-            }
+            await ConnectDisconnectedDrivesAsync();  
         }
         catch (Exception ex)
         {
@@ -134,13 +122,7 @@ public partial class DrivesViewModel : BaseViewModel
     {
         try
         {
-            foreach (var drive in Drives)
-            {
-                if (drive.IsConnected)
-                    await _connectorHelper.DisconnectDriveAsync(drive, ConnectedDrives);
-
-                RecalculateProgressbar();
-            } 
+            await DisconnectConnectedDrivesAsync();
         }
         catch (Exception ex)
         {
@@ -278,6 +260,26 @@ public partial class DrivesViewModel : BaseViewModel
             }
         }
         IsBusy = false;
+    }
+
+    private async Task ConnectDisconnectedDrivesAsync()
+    {
+        var disconnectedDrives = Drives.Where(d => d.IsConnected is false);
+        foreach (var drive in disconnectedDrives)
+        {
+            await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
+            RecalculateProgressbar();
+        }
+    }
+
+    private async Task DisconnectConnectedDrivesAsync()
+    {
+        var connectedDrives = Drives.Where(d => d.IsConnected);
+        foreach (var drive in connectedDrives)
+        {
+            await _connectorHelper.DisconnectDriveAsync(drive, ConnectedDrives);
+            RecalculateProgressbar();
+        }
     }
 
     private void RecalculateProgressbar()
