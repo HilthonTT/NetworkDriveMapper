@@ -90,6 +90,12 @@ public partial class AddViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task GoToAddDriveAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
     private async Task GoToRootAsync()
     {
         await Shell.Current.Navigation.PopToRootAsync();

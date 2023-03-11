@@ -62,21 +62,20 @@ public partial class DetailsViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task GoToDetailsAsync(DriveModel drive)
-    {
-        if (drive is null)
-            return;
-
-        await Shell.Current.GoToAsync($"{nameof(DetailsPage)}", true,
-            new Dictionary<string, object>
-            {
-                { "Drive", drive }
-            });
-    }
-
-    [RelayCommand]
     private async Task GoToSettingsAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToAddDriveAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToRootAsync()
+    {
+        await Shell.Current.Navigation.PopToRootAsync();
     }
 }

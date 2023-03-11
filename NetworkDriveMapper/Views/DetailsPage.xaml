@@ -10,6 +10,10 @@
              Title="{Binding Title}">
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToRootCommand}"/>
         <ToolbarItem Text="Settings" 
                      Order="Secondary" 
                      Priority="0"

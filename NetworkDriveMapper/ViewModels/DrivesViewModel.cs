@@ -36,7 +36,7 @@ public partial class DrivesViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    private float _driveProgress; // Progress Label, shows the percentage in number
+    private float _driveProgress = 0; // Progress Label, shows the percentage in number
 
     [ObservableProperty]
     private float _drivePercentage; // The progress bar percentage, changes the progress bar's length.
@@ -184,6 +184,12 @@ public partial class DrivesViewModel : BaseViewModel
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToRootAsync()
+    {
+        await Shell.Current.Navigation.PopToRootAsync();
     }
 
     /// <summary>

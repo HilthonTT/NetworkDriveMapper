@@ -16,6 +16,10 @@
     </ContentPage.Behaviors>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Home" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToRootCommand}"/>
         <ToolbarItem Text="Settings" 
                      Order="Secondary" 
                      Priority="0"
@@ -43,7 +47,7 @@
                    Margin="0, 0, 10, 15"
                    Style="{StaticResource LargeLabel}"/>
 
-                <Label Text="{Binding DriveProgress, StringFormat='{0}%'}"
+                <Label Text="{Binding DriveProgress, StringFormat='{0:F0}%'}"
                        Style="{StaticResource LargeLabel}"/>
             </HorizontalStackLayout>
 

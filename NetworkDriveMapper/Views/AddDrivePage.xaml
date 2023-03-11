@@ -18,6 +18,10 @@
                      Order="Secondary" 
                      Priority="0"
                      Command="{Binding GoToSettingsCommand}"/>
+        <ToolbarItem Text="Add A Drive" 
+                     Order="Secondary" 
+                     Priority="0"
+                     Command="{Binding GoToAddDriveCommand}"/>
     </ContentPage.ToolbarItems>
     
     <ScrollView>

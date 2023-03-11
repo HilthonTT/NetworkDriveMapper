@@ -105,6 +105,12 @@ public partial class SettingsViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task GoToSettingsAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
+
+    [RelayCommand]
     private async Task GoToAddDriveAsync()
     {
         await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
