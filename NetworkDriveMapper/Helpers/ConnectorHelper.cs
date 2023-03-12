@@ -16,7 +16,7 @@ public class ConnectorHelper : IConnectorHelper
     public async Task ChecksForConnectedDrivesAsync(DriveModel drive, List<DriveModel> connectedDrives)
     {
         if (OperatingSystem.IsWindows())
-            await _driveMapperService.ChecksForConnectedDrivesAsync(drive);
+             await _driveMapperService.ChecksForConnectedDrivesAsync(drive);
         else if (OperatingSystem.IsMacOS())
             await _driveMapperService.ChecksForConnectedDrivesMacOSAsync(drive);
         else

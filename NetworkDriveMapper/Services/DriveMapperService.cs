@@ -19,23 +19,22 @@ public class DriveMapperService : IDriveMapperService
 
     public async Task ChecksForConnectedDrivesAsync(DriveModel drive)
     {
-        string networkPath = Path.Combine(drive.Letter, Path.DirectorySeparatorChar.ToString());
+        string driveLetter = drive.Letter + ":";
 
-        await Task.Run(() =>
+        bool isConnected = await Task.Run(() => Directory.Exists(driveLetter));
+
+        if (isConnected)
         {
-            if (Directory.Exists(networkPath))
-            {
-                drive.IsConnected = true;
-                drive.ButtonColor = Green;
-                ErrorMessage = "";
-            }
-            else
-            {
-                drive.IsConnected = false;
-                drive.ButtonColor = Red;
-                ErrorMessage = "Drive is not connected";
-            }
-        });
+            drive.IsConnected = true;
+            drive.ButtonColor = Green;
+            ErrorMessage = "";
+        }
+        else
+        {
+            drive.IsConnected = false;
+            drive.ButtonColor = Red;
+            ErrorMessage = "Drive is not connected";
+        }
     }
 
     public async Task ChecksForConnectedDrivesMacOSAsync(DriveModel drive)
