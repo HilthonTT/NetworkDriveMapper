@@ -2,7 +2,6 @@
 
 public interface IAppSettingsService
 {
-    Task DropTable();
     Task<List<AppSettings>> GetAllSettings();
     Task<AppSettings> GetSettings();
     Task<int> InsertSettings(AppSettings settings);

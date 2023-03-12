@@ -44,9 +44,4 @@ public class AppSettingsService : IAppSettingsService
         var settings = await _dbConnection.Table<AppSettings>().ToListAsync();
         return settings.FirstOrDefault();
     }
-
-    public async Task DropTable()
-    {
-        await _dbConnection.DropTableAsync<AppSettings>();
-    }
 }

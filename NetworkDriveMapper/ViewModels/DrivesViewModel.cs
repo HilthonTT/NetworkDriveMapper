@@ -82,11 +82,6 @@ public partial class DrivesViewModel : BaseViewModel
             {
                 await ConnectDisconnectedDrivesAsync();
             }
-
-            if (_settings.LaunchOnStartUp)
-            {
-                StartOnStartup();
-            }
         }
         catch (Exception ex)
         {
@@ -283,20 +278,6 @@ public partial class DrivesViewModel : BaseViewModel
         {
             await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
             RecalculateProgressbar();
-        }
-    }
-
-    private void StartOnStartup()
-    {
-        using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
-        {
-            string appName = Assembly.GetEntryAssembly().GetName().Name;
-
-            if (key.GetValue(appName) == null)
-            {
-                // Register the app to launch on startup
-                key.SetValue(appName, $"\"{Assembly.GetExecutingAssembly().Location}\"");
-            }
         }
     }
 
