@@ -51,6 +51,10 @@
                         <Label Text="Automatically Connect Drives On Launch"
                                Style="{StaticResource LargeLabel}"/>
 
+                        <Label Text="Launch On Start Up."
+                               Style="{StaticResource LargeLabel}"
+                               Margin="0,20,0,0"/>
+
                     </StackLayout>
                     <StackLayout Spacing="15"
                                  Grid.Column="1">
@@ -60,6 +64,12 @@
                                 Margin="45,0,2,0"
                                 BackgroundColor="{Binding Settings.AutoConnectColorAsColor}"
                                 Command="{Binding ChangeValueAutoConnectCommand}"/>
+
+                        <Button HeightRequest="50"
+                                CornerRadius="20"
+                                Margin="45,0,2,0"
+                                BackgroundColor="{Binding Settings.LaunchColorAsColor}"
+                                Command="{Binding ChangeValueLaunchOnStartUpCommand}"/>
 
                     </StackLayout>
 

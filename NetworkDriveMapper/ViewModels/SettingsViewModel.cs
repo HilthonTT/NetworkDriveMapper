@@ -33,7 +33,8 @@ public partial class SettingsViewModel : BaseViewModel
             {
                 var appSettings = new AppSettings
                 {
-                    AutoConnectOnStartUp = true
+                    AutoConnectOnStartUp = true,
+                    LaunchOnStartUp = false,
                 };
 
                 await _appSettingsService.InsertSettings(appSettings);
@@ -45,14 +46,7 @@ public partial class SettingsViewModel : BaseViewModel
                 Settings = settings;
             }
 
-            if (Settings.AutoConnectOnStartUp is true)
-            {
-                Settings.AutoConnectButtonColor = Green;
-            }
-            else
-            {
-                Settings.AutoConnectButtonColor = Red;
-            }
+            SettingsButtonColors();
         }
         catch (Exception ex)
         {
@@ -78,6 +72,21 @@ public partial class SettingsViewModel : BaseViewModel
             Settings.AutoConnectButtonColor = Red;
         }
     }
+
+    [RelayCommand]
+    private void ChangeValueLaunchOnStartUp()
+    {
+        Settings.LaunchOnStartUp = !Settings.LaunchOnStartUp;
+        if (Settings.LaunchOnStartUp is true)
+        {
+            Settings.LaunchButtonColor = Green;
+        }
+        else
+        {
+            Settings.LaunchButtonColor = Red;
+        }
+    }
+
 
     [RelayCommand]
     private async Task SaveSettings()
@@ -120,5 +129,26 @@ public partial class SettingsViewModel : BaseViewModel
     private async Task GoToRootAsync()
     {
         await Shell.Current.Navigation.PopToRootAsync();
+    }
+
+    private void SettingsButtonColors()
+    {
+        if (Settings.AutoConnectOnStartUp is true)
+        {
+            Settings.AutoConnectButtonColor = Green;
+        }
+        else
+        {
+            Settings.AutoConnectButtonColor = Red;
+        }
+
+        if (Settings.LaunchOnStartUp is true)
+        {
+            Settings.LaunchButtonColor = Green;
+        }
+        else
+        {
+            Settings.LaunchButtonColor = Red;
+        }
     }
 }

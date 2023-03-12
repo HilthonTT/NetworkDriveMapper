@@ -1,4 +1,6 @@
-﻿using NetworkDriveMapper.Helpers;
+﻿using Microsoft.Win32;
+using NetworkDriveMapper.Helpers;
+using System.Reflection;
 
 namespace NetworkDriveMapper.ViewModels;
 
@@ -69,8 +71,9 @@ public partial class DrivesViewModel : BaseViewModel
 
             foreach (var drive in drives)
             {
-                SetPropertyToDisconnected(drive);
+                await _connectorHelper.ChecksForConnectedDrivesAsync(drive, ConnectedDrives);
                 Drives.Add(drive);
+                RecalculateProgressbar();
             }
 
             FilteredDrives = new ObservableCollection<DriveModel>(Drives);
@@ -78,7 +81,12 @@ public partial class DrivesViewModel : BaseViewModel
             if (_settings.AutoConnectOnStartUp)
             {
                 await ConnectDisconnectedDrivesAsync();
-            } 
+            }
+
+            if (_settings.LaunchOnStartUp)
+            {
+                StartOnStartup();
+            }
         }
         catch (Exception ex)
         {
@@ -275,6 +283,20 @@ public partial class DrivesViewModel : BaseViewModel
         {
             await _connectorHelper.ConnectDriveAsync(drive, ConnectedDrives);
             RecalculateProgressbar();
+        }
+    }
+
+    private void StartOnStartup()
+    {
+        using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true))
+        {
+            string appName = Assembly.GetEntryAssembly().GetName().Name;
+
+            if (key.GetValue(appName) == null)
+            {
+                // Register the app to launch on startup
+                key.SetValue(appName, $"\"{Assembly.GetExecutingAssembly().Location}\"");
+            }
         }
     }
 

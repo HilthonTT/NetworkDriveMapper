@@ -6,11 +6,32 @@ public class ConnectorHelper : IConnectorHelper
 
     private const string Red = "#FF0000";
     private const string Green = "#00FF00";
-    private const string ErrorMessage = "Your platform is unsupported";
+    private const string ErrorMessage = "Your platform is unsupported.";
 
     public ConnectorHelper(IDriveMapperService driveMapperService)
     {
         _driveMapperService = driveMapperService;
+    }
+
+    public async Task ChecksForConnectedDrivesAsync(DriveModel drive, List<DriveModel> connectedDrives)
+    {
+        if (OperatingSystem.IsWindows())
+            await _driveMapperService.ChecksForConnectedDrivesAsync(drive);
+        else if (OperatingSystem.IsMacOS())
+            await _driveMapperService.ChecksForConnectedDrivesMacOSAsync(drive);
+        else
+            await Shell.Current.DisplayAlert("Error!",
+                ErrorMessage, "OK");
+
+        if (_driveMapperService.IsError() == false)
+        {
+            SetPropertyToConnected(drive);
+            connectedDrives.Add(drive);
+        }
+        else
+        {
+            SetPropertyToDisconnected(drive);
+        }
     }
 
     public async Task ConnectDriveAsync(DriveModel drive, List<DriveModel> connectedDrives)

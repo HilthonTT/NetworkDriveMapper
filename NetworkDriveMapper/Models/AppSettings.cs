@@ -14,5 +14,13 @@ public partial class AppSettings : ObservableObject
     [NotifyPropertyChangedFor(nameof(AutoConnectColorAsColor))]
     private string _autoConnectButtonColor;
 
+    [ObservableProperty]
+    private bool _launchOnStartUp = false;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(LaunchColorAsColor))]
+    private string _launchButtonColor;
+    
     public Color AutoConnectColorAsColor => Color.FromArgb(AutoConnectButtonColor);
+    public Color LaunchColorAsColor => Color.FromArgb(LaunchButtonColor);
 }

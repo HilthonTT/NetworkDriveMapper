@@ -2,7 +2,9 @@
 
 public class DriveMapperService : IDriveMapperService
 {
-    public string ErrorMessage = "";
+    private string ErrorMessage = "";
+    private const string Green = "#00FF00";
+    private const string Red = "#FF0000";
 
     public bool IsError()
     {
@@ -12,6 +14,55 @@ public class DriveMapperService : IDriveMapperService
         }
 
         return false;
+    }
+
+
+    public async Task ChecksForConnectedDrivesAsync(DriveModel drive)
+    {
+        string networkPath = Path.Combine(drive.Letter, Path.DirectorySeparatorChar.ToString());
+
+        await Task.Run(() =>
+        {
+            if (Directory.Exists(networkPath))
+            {
+                drive.IsConnected = true;
+                drive.ButtonColor = Green;
+                ErrorMessage = "";
+            }
+            else
+            {
+                drive.IsConnected = false;
+                drive.ButtonColor = Red;
+                ErrorMessage = "Drive is not connected";
+            }
+        });
+    }
+
+    public async Task ChecksForConnectedDrivesMacOSAsync(DriveModel drive)
+    {
+        Process process = new Process();
+        process.StartInfo.FileName = "diskutil";
+        process.StartInfo.Arguments = "list -plist";
+        process.StartInfo.RedirectStandardOutput = true;
+        process.StartInfo.CreateNoWindow = true;
+        process.StartInfo.UseShellExecute = false;
+        process.Start();
+        string output = process.StandardOutput.ReadToEnd();
+        
+        await process.WaitForExitAsync();
+
+        bool isMounted = output.Contains(drive.DriveName);
+
+        if (isMounted)
+        {
+            drive.IsConnected = true;
+            drive.ButtonColor = Green;
+        }
+        else
+        {
+            drive.IsConnected = false;
+            drive.ButtonColor = Red;
+        }
     }
 
     /// <summary>
@@ -40,7 +91,7 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already mounted.", "OK");
                 drive.IsConnected = true;
-                drive.ButtonColor = "#00FF00"; // Green
+                drive.ButtonColor = Green;
                 ErrorMessage = "";
             }
             else
@@ -48,14 +99,14 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Error!",
                     $"Mapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
-                drive.ButtonColor = "#FF0000"; // Red
+                drive.ButtonColor = Red;
                 ErrorMessage = errorMessage;
             }
         }
         else
         {
             drive.IsConnected = true;
-            drive.ButtonColor = "#00FF00"; // Green
+            drive.ButtonColor = Green;
             ErrorMessage = "";
         }
     }
@@ -78,7 +129,7 @@ public class DriveMapperService : IDriveMapperService
 
         string errorMessage = process.StandardError.ReadToEnd();
 
-        if(process.ExitCode is not 0)
+        if (process.ExitCode is not 0)
         {
             // Handle the case where the command failed
             if (errorMessage.Contains("local device name is already in use"))
@@ -86,6 +137,7 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already mounted.", "OK");
                 drive.IsConnected = true;
+                drive.ButtonColor = Green;
                 ErrorMessage = "";
             }
             else
@@ -93,12 +145,15 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Error!",
                     $"Mapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
+                drive.ButtonColor = Red;
                 ErrorMessage = errorMessage;
             }
         }
         else
         {
             drive.IsConnected = true;
+            drive.ButtonColor = Green;
+            ErrorMessage = "";
         }
     }
 
@@ -128,7 +183,7 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already unmapped.", "OK");
                 drive.IsConnected = false;
-                drive.ButtonColor = "#FF0000"; // Red
+                drive.ButtonColor = Red;
                 ErrorMessage = "";
             }
             else
@@ -136,12 +191,12 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Error!",
                     $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
-                drive.ButtonColor = "#FF0000"; // Red
+                drive.ButtonColor = Red;
                 ErrorMessage = errorMessage;
             }
         }
 
-        drive.ButtonColor = "#FF0000"; // Red
+        drive.ButtonColor = Red;
         ErrorMessage = "";
     }
 
@@ -171,7 +226,7 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Warning!",
                     $"Drive {drive.Letter} is already unmapped.", "OK");
                 drive.IsConnected = false;
-                drive.ButtonColor = "#FF0000"; // Red
+                drive.ButtonColor = Red;
                 ErrorMessage = "";
             }
             else
@@ -179,12 +234,12 @@ public class DriveMapperService : IDriveMapperService
                 await Shell.Current.DisplayAlert("Error!",
                     $"Unmapping failed with drive {drive.DriveName} with error code {process.ExitCode}: {errorMessage}", "OK");
                 drive.IsConnected = false;
-                drive.ButtonColor = "#FF0000"; // Red
+                drive.ButtonColor = Red;
                 ErrorMessage = errorMessage;
             }
         }
 
-        drive.ButtonColor = "#FF0000"; // Red
+        drive.ButtonColor = Red;
         ErrorMessage = "";
     }
 }
