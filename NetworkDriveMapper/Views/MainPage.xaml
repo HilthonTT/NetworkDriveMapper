@@ -68,11 +68,9 @@
         <RefreshView Grid.ColumnSpan="2"
                      Grid.Row="1"
                      Command="{Binding GetDrivesCommand}"
-                     IsRefreshing="{Binding IsRefreshing}"
-                     HorizontalOptions="Center">
+                     IsRefreshing="{Binding IsRefreshing}">
 
             <CollectionView BackgroundColor="Transparent"
-                            MinimumWidthRequest="1200"
                             ItemsSource="{Binding FilteredDrives}"
                             SelectionMode="None">
                 <CollectionView.EmptyView>
@@ -88,15 +86,11 @@
 
                     </StackLayout>
                 </CollectionView.EmptyView>
-                <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical"
-                                     Span="{OnIdiom Desktop=1, Default=3}" />
-                </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:DriveModel">
                         <Grid Padding="10">
                             <Frame MinimumHeightRequest="175"
-                                   MaximumWidthRequest="1200"
+                                   MaximumHeightRequest="1200"
                                    Padding="10"
                                    Style="{StaticResource CardView}">
                                 <Frame.GestureRecognizers>
@@ -136,23 +130,25 @@
                                         </Frame>
                                     </FlexLayout>
 
-                                    <HorizontalStackLayout Grid.Row="1"
-                                                           HorizontalOptions="CenterAndExpand"
-                                                           VerticalOptions="CenterAndExpand">
+                                    <StackLayout Grid.Row="1"
+                                                 Grid.ColumnSpan="3"
+                                                 Orientation="Horizontal"
+                                                 HorizontalOptions="FillAndExpand">
+
                                         <Button Text="Connect"
-                                                Margin="0,0,5,0"
-                                                WidthRequest="575"
+                                                MinimumWidthRequest="150"
                                                 Style="{StaticResource ButtonOutline}"
+                                                HorizontalOptions="FillAndExpand"
                                                 CommandParameter="{Binding .}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=ConnectSingularDriveCommand}"/>
-
                                         <Button Text="Disconnect"
-                                                Margin="5,0,0,0"
-                                                WidthRequest="575"
+                                                MinimumWidthRequest="150"
                                                 Style="{StaticResource ButtonOutline}"
+                                                HorizontalOptions="FillAndExpand"
                                                 CommandParameter="{Binding .}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:DrivesViewModel}}, Path=DisconnectSingularDriveCommand}"/>
-                                    </HorizontalStackLayout>
+
+                                    </StackLayout>
                                 </Grid>
                             </Frame>
                         </Grid>
@@ -176,6 +172,16 @@
                 Grid.Row="2"
                 Grid.Column="1"
                 Margin="8"/>
+
+
+        <ActivityIndicator
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            HorizontalOptions="Fill"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            Color="{StaticResource Primary}"
+            VerticalOptions="Center" />
 
     </Grid>
 </ContentPage>
