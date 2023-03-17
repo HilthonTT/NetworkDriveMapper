@@ -24,18 +24,6 @@ public partial class DriveModel : ObservableValidator
     private string _userName;
 
     [ObservableProperty]
-    private string _encryptedLetter;
-
-    [ObservableProperty]
-    private string _encryptedAddress;
-
-    [ObservableProperty]
-    private string _encryptedPassword;
-
-    [ObservableProperty]
-    private string _encryptedUserName;
-
-    [ObservableProperty]
     private bool _isConnected = false;
 
     [ObservableProperty]
