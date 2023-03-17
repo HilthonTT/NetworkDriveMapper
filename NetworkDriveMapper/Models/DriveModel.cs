@@ -8,30 +8,32 @@ public partial class DriveModel : ObservableValidator
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
-    [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
+    [ObservableProperty] 
     private string _letter;
 
-    [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
+    [ObservableProperty] 
     private string _address;
 
-    [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
+    [ObservableProperty] 
     private string _driveName;
 
-    [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
+    [ObservableProperty] 
     private string _password;
 
     [ObservableProperty]
-    [NotifyDataErrorInfo]
-    [Required]
     private string _userName;
+
+    [ObservableProperty]
+    private string _encryptedLetter;
+
+    [ObservableProperty]
+    private string _encryptedAddress;
+
+    [ObservableProperty]
+    private string _encryptedPassword;
+
+    [ObservableProperty]
+    private string _encryptedUserName;
 
     [ObservableProperty]
     private bool _isConnected = false;

@@ -115,7 +115,8 @@
 
                     <Label Text="User Name"
                        Style="{StaticResource LargeLabel}"/>
-                    <Entry Text="{Binding Drive.UserName}" />
+                    <Entry Text="{Binding Drive.UserName}"
+                           IsPassword="True"/>
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Button Text="Update"
