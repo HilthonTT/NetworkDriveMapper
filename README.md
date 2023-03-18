@@ -23,7 +23,7 @@ Credits
 Network Drive Mapper was created by [Your Name Here].
 
 License
-Network Drive Mapper is licensed under the MIT License. See LICENSE for more information.
+Network Drive Mapper is licensed under the GNU License. See LICENSE for more information.
 
 Contributing
 To contribute to Network Drive Mapper, follow these steps:
