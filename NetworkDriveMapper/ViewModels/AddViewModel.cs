@@ -1,13 +1,18 @@
-﻿namespace NetworkDriveMapper.ViewModels;
+﻿using NetworkDriveMapper.Helpers;
+
+namespace NetworkDriveMapper.ViewModels;
 
 public partial class AddViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
+    private readonly IAesEncryptionHelper _encryption;
 
-    public AddViewModel(IDriveService driveService)
+    public AddViewModel(IDriveService driveService, 
+                        IAesEncryptionHelper encryption)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
+        _encryption = encryption;
     }
 
     [ObservableProperty]
@@ -45,11 +50,11 @@ public partial class AddViewModel : BaseViewModel
 
             var driveModel = new DriveModel
             {
-                Letter = Letter,
-                Address = Address,
-                DriveName = DriveName,
-                Password = Password,
-                UserName = UserName
+                Letter = await _encryption.EncryptAsync(Letter),
+                Address = await _encryption.EncryptAsync(Address),
+                DriveName = await _encryption.EncryptAsync(DriveName),
+                Password = await _encryption.EncryptAsync(Password),
+                UserName = await _encryption.EncryptAsync(UserName),
             };
 
             var response = await _driveService.AddDrive(driveModel);

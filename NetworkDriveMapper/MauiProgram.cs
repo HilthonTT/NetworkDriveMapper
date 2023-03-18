@@ -27,6 +27,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IAppSettingsService, AppSettingsService>();
         builder.Services.AddSingleton<ILoggedInAppSettings, LoggedInAppSettings>();
         builder.Services.AddSingleton<IConnectorHelper, ConnectorHelper>();
+
+        builder.Services.AddSingleton<IAesEncryptionHelper, AesEncryptionHelper>();
         
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
 

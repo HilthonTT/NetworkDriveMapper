@@ -10,17 +10,20 @@ public partial class DrivesViewModel : BaseViewModel
     private readonly IAppSettingsService _appSettingsService;
     private readonly ILoggedInAppSettings _settings;
     private readonly IConnectorHelper _connectorHelper;
+    private readonly IAesEncryptionHelper _encryption;
 
     public DrivesViewModel(IDriveService driveService,
                             IAppSettingsService appSettingsService,
                             ILoggedInAppSettings settings,
-                            IConnectorHelper connectorHelper)
+                            IConnectorHelper connectorHelper,
+                            IAesEncryptionHelper encryption)
     {
         Title = "Network Drive Mapper";
         _driveService = driveService;
         _appSettingsService = appSettingsService;
         _settings = settings;
         _connectorHelper = connectorHelper;
+        _encryption = encryption;
     }
 
     [ObservableProperty]
@@ -71,6 +74,7 @@ public partial class DrivesViewModel : BaseViewModel
 
             foreach (var drive in drives)
             {
+                await DecryptDrive(drive);
                 await _connectorHelper.ChecksForConnectedDrivesAsync(drive, ConnectedDrives);
                 Drives.Add(drive);
                 RecalculateProgressbar();
@@ -221,6 +225,7 @@ public partial class DrivesViewModel : BaseViewModel
             // Checks if the drive was in the driveList, if it was, put the value its IsConnected previous value.
             foreach (var drive in drives)
             {
+                await DecryptDrive(drive);
                 var selectedDrive = driveList.Where(d => d.Id == drive.Id).FirstOrDefault();
                 if (selectedDrive is not null) 
                 {
@@ -308,5 +313,14 @@ public partial class DrivesViewModel : BaseViewModel
     {
         drive.ButtonColor = Red;
         drive.IsConnected = false;
+    }
+
+    private async Task DecryptDrive(DriveModel drive)
+    {
+        drive.Letter = await _encryption.DecryptAsync(drive.Letter);
+        drive.Address = await _encryption.DecryptAsync(drive.Address);
+        drive.DriveName = await _encryption.DecryptAsync(drive.DriveName);
+        drive.Password = await _encryption.DecryptAsync(drive.Password);
+        drive.UserName = await _encryption.DecryptAsync(drive.UserName);
     }
 }

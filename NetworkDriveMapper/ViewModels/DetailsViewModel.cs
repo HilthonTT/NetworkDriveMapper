@@ -1,12 +1,18 @@
-﻿namespace NetworkDriveMapper.ViewModels;
+﻿using NetworkDriveMapper.Helpers;
+
+namespace NetworkDriveMapper.ViewModels;
 
 [QueryProperty("Drive", "Drive")]
 public partial class DetailsViewModel : BaseViewModel
 {
     private readonly IDriveService _driveService;
-    public DetailsViewModel(IDriveService driveService)
+    private readonly IAesEncryptionHelper _encryption;
+
+    public DetailsViewModel(IDriveService driveService,
+                            IAesEncryptionHelper encryption)
     {
         _driveService = driveService;
+        _encryption = encryption;
         Title = "Network Drive Mapper";
     }
 
@@ -49,7 +55,17 @@ public partial class DetailsViewModel : BaseViewModel
     {
         try
         {
-            var response = await _driveService.UpdateDrive(Drive);
+            var drive = new DriveModel()
+            {
+                Id = Drive.Id,
+                Letter = await _encryption.EncryptAsync(Drive.Letter),
+                Address = await _encryption.EncryptAsync(Drive.Address),
+                DriveName = await _encryption.EncryptAsync(Drive.DriveName),
+                Password = await _encryption.EncryptAsync(Drive.Password),
+                UserName = await _encryption.EncryptAsync(Drive.UserName),
+            };
+
+            var response = await _driveService.UpdateDrive(drive);
 
             await Shell.Current.DisplayAlert("Drive Updated!",
                 $"Drive {Drive.DriveName} has been updated!", "OK");
