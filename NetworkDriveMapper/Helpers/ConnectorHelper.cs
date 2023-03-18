@@ -85,13 +85,13 @@ public class ConnectorHelper : IConnectorHelper
         }
     }
 
-    private void SetPropertyToConnected(DriveModel drive)
+    private static void SetPropertyToConnected(DriveModel drive)
     {
         drive.ButtonColor = Green;
         drive.IsConnected = true;
     }
 
-    private void SetPropertyToDisconnected(DriveModel drive)
+    private static void SetPropertyToDisconnected(DriveModel drive)
     {
         drive.ButtonColor = Red;
         drive.IsConnected = false;
