@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NetworkDriveMapper.Helpers;
 
@@ -28,6 +29,10 @@ public static class MauiProgram
         builder.Services.AddSingleton<ILoggedInAppSettings, LoggedInAppSettings>();
         builder.Services.AddSingleton<IConnectorHelper, ConnectorHelper>();
 
+        // Configuration JSON File Injection
+        builder.Configuration.AddConfiguration(AddConfiguration());
+
+        // Encryption Service
         builder.Services.AddSingleton<IAesEncryptionHelper, AesEncryptionHelper>();
         
         builder.UseMauiApp<App>().UseMauiCommunityToolkit();
@@ -43,6 +48,16 @@ public static class MauiProgram
         builder.Services.AddTransient<DetailsPage>();
         builder.Services.AddTransient<AddDrivePage>();
         builder.Services.AddTransient<SettingsPage>();
+
+        return builder.Build();
+    }
+
+    private static IConfiguration AddConfiguration()
+    {
+        string configFilePath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        IConfigurationBuilder builder = new ConfigurationBuilder()
+            .AddJsonFile(configFilePath, optional: false, reloadOnChange: true);
+
 
         return builder.Build();
     }

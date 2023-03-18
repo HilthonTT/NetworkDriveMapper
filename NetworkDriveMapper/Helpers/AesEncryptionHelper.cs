@@ -1,17 +1,20 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.Extensions.Configuration;
+using System.Security.Cryptography;
 using System.Text;
-using System;
 
 namespace NetworkDriveMapper.Helpers;
 
 public class AesEncryptionHelper : IAesEncryptionHelper
 {
     private readonly Aes _aes;
-    public AesEncryptionHelper()
+    private readonly IConfiguration _config;
+
+    public AesEncryptionHelper(IConfiguration config)
     {
+        _config = config;
         _aes  = Aes.Create();
-        _aes.Key = StringToBytes("PNZaGtW/Z8bpfbv2KxgSEB/ePXWzUqZ3dRoW+ugcb9k=");
-        _aes.IV = StringToBytes("eqcMCizAHiTjOX9dnnYrjA==");
+        _aes.Key = StringToBytes(_config.GetValue<string>("Key"));
+        _aes.IV = StringToBytes(_config.GetValue<string>("IV"));
     }
 
     public async Task<string> EncryptAsync(string plainText)
