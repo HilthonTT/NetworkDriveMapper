@@ -45,29 +45,31 @@
                 <StackLayout Spacing="15">
 
                     <Label Text="Drive Letter"
-                               Style="{StaticResource LargeLabel}"/>
+                           Style="{StaticResource LargeLabel}"/>
                     <Entry Text="{Binding Letter}" />
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Label Text="Address"
-                               Style="{StaticResource LargeLabel}"/>
-                    <Entry Text="{Binding Address}" />
+                           Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding Address}"
+                           IsPassword="True"/>
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Label Text="Drive Name"
-                               Style="{StaticResource LargeLabel}"/>
+                           Style="{StaticResource LargeLabel}"/>
                     <Entry Text="{Binding DriveName}" />
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Label Text="Password"
-                               Style="{StaticResource LargeLabel}"/>
+                           Style="{StaticResource LargeLabel}"/>
                     <Entry Text="{Binding Password}" 
-                               IsPassword="True"/>
+                           IsPassword="True"/>
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Label Text="User Name"
-                               Style="{StaticResource LargeLabel}"/>
-                    <Entry Text="{Binding UserName}" />
+                           Style="{StaticResource LargeLabel}"/>
+                    <Entry Text="{Binding UserName}"
+                           IsPassword="True"/>
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Button Text="Save"

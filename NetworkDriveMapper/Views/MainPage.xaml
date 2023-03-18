@@ -106,7 +106,7 @@
                                                HeightRequest="100"
                                                CornerRadius="90">
                                             <Label Text="{Binding Letter}"
-                                                   Style="{StaticResource XXLLabel}"
+                                                   Style="{StaticResource LetterLabel}"
                                                    HorizontalOptions="Center"
                                                    VerticalOptions="Center"/>
                                         </Frame>
@@ -115,9 +115,9 @@
                                     <VerticalStackLayout Grid.Column="1"
                                                          Margin="0,22,0,0">
                                         <Label Text="{Binding DriveName}"
-                                           Style="{StaticResource LargeLabel}"/>
-                                        <Label Text="{Binding UserName}"
-                                           Style="{StaticResource MediumLabel}"/>
+                                               Style="{StaticResource XXLLabel}"
+                                               VerticalOptions="CenterAndExpand"
+                                               HorizontalOptions="Center"/>
                                     </VerticalStackLayout>
 
                                     <FlexLayout Grid.Column="2">

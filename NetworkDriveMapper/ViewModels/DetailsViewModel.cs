@@ -55,6 +55,26 @@ public partial class DetailsViewModel : BaseViewModel
     {
         try
         {
+            if (string.IsNullOrWhiteSpace(Drive.Letter) ||
+                string.IsNullOrWhiteSpace(Drive.Address) ||
+                string.IsNullOrWhiteSpace(Drive.DriveName) ||
+                string.IsNullOrWhiteSpace(Drive.Password) ||
+                string.IsNullOrWhiteSpace(Drive.UserName))
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    "Unable to add drive: Every field must be populated.", "OK");
+
+                return;
+            }
+
+            if (Drive.Letter.Length > 1)
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    "Unable to add drive: The Letter must only contain 1 character.", "OK");
+
+                return;
+            }
+
             var drive = new DriveModel()
             {
                 Id = Drive.Id,
@@ -75,23 +95,5 @@ public partial class DetailsViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!",
                 $"Unable to update drive: {ex.Message}", "OK");
         }
-    }
-
-    [RelayCommand]
-    private async Task GoToSettingsAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToAddDriveAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToRootAsync()
-    {
-        await Shell.Current.Navigation.PopToRootAsync();
     }
 }

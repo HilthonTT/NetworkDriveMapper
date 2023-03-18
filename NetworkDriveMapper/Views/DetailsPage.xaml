@@ -47,7 +47,7 @@
                                 WidthRequest="160">
 
                         <Label Text="{Binding Drive.Letter}"
-                                Style="{StaticResource XXLLabel}"
+                                Style="{StaticResource LetterLabel}"
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
                                 Margin="32, 0, 0, 0"/>
@@ -62,16 +62,10 @@
 
                 <Frame Style="{StaticResource CardView}"
                        Padding="10"
-                       HeightRequest="200">
+                       HeightRequest="150">
                     <VerticalStackLayout Spacing="15">
-                        <Label Text="{Binding Drive.DriveName, StringFormat='Drive Name: {0}'}"
-                               Style="{StaticResource LargeLabel}"
-                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding Drive.Address, StringFormat='IP Address: {0}'}"
-                               Style="{StaticResource LargeLabel}"
-                               HorizontalOptions="Center"/>
-                        <Label Text="{Binding Drive.UserName, StringFormat='User Name: {0}'}"
-                               Style="{StaticResource LargeLabel}"
+                        <Label Text="{Binding Drive.DriveName}"
+                               Style="{StaticResource XXLLabel}"
                                HorizontalOptions="Center"/>
 
                         <Button Text="Delete Drive"
@@ -85,7 +79,7 @@
 
             <Frame Style="{StaticResource CardView}"
                    Padding="20"
-                   Margin="30"
+                   Margin="30, 0, 30, 30"
                    Grid.RowSpan="2">
 
                 <StackLayout Margin="0"
@@ -99,7 +93,8 @@
 
                     <Label Text="Address"
                        Style="{StaticResource LargeLabel}"/>
-                    <Entry Text="{Binding Drive.Address}" />
+                    <Entry Text="{Binding Drive.Address}"
+                           IsPassword="True"/>
                     <BoxView HeightRequest="0.8" Color="Gray" />
 
                     <Label Text="Drive Name"

@@ -48,9 +48,17 @@ public partial class AddViewModel : BaseViewModel
                 return;
             }
 
+            if (Letter.Length > 1)
+            {
+                await Shell.Current.DisplayAlert("Error!",
+                    "Unable to add drive: The Letter must only contain 1 character.", "OK");
+
+                return;
+            }
+
             var driveModel = new DriveModel
             {
-                Letter = await _encryption.EncryptAsync(Letter),
+                Letter = await _encryption.EncryptAsync(Letter.ToUpper()),
                 Address = await _encryption.EncryptAsync(Address),
                 DriveName = await _encryption.EncryptAsync(DriveName),
                 Password = await _encryption.EncryptAsync(Password),
@@ -86,23 +94,5 @@ public partial class AddViewModel : BaseViewModel
             await Shell.Current.DisplayAlert("Error!",
                 $"Unable to add drive: {ex.Message}", "OK");
         }
-    }
-
-    [RelayCommand]
-    private async Task GoToSettingsAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToAddDriveAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToRootAsync()
-    {
-        await Shell.Current.Navigation.PopToRootAsync();
     }
 }

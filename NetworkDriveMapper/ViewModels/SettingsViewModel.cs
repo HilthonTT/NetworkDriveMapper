@@ -97,24 +97,6 @@ public partial class SettingsViewModel : BaseViewModel
         }
     }
 
-    [RelayCommand]
-    private async Task GoToSettingsAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToAddDriveAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToRootAsync()
-    {
-        await Shell.Current.Navigation.PopToRootAsync();
-    }
-
     private void SettingsButtonColors()
     {
         if (Settings.AutoConnectOnStartUp is true)

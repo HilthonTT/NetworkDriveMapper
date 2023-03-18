@@ -181,24 +181,6 @@ public partial class DrivesViewModel : BaseViewModel
             });
     }
 
-    [RelayCommand]
-    private async Task GoToSettingsAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToAddDriveAsync()
-    {
-        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
-    }
-
-    [RelayCommand]
-    private async Task GoToRootAsync()
-    {
-        await Shell.Current.Navigation.PopToRootAsync();
-    }
-
     /// <summary>
     /// This method basically reloads the Drives List on the main page
     /// to see if there were any modification

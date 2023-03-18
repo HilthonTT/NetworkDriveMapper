@@ -27,4 +27,22 @@ public partial class BaseViewModel : ObservableObject
 
     [ObservableProperty]
     private ObservableCollection<DriveModel> _filteredDrives = new();
+
+    [RelayCommand]
+    private async Task GoToSettingsAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(SettingsPage)}", true);
+    }
+
+    [RelayCommand]
+    private async Task GoToAddDriveAsync()
+    {
+        await Shell.Current.GoToAsync($"{nameof(AddDrivePage)}", true);
+    }
+
+    [RelayCommand]
+    private static async Task GoToRootAsync()
+    {
+        await Shell.Current.Navigation.PopToRootAsync();
+    }
 }
