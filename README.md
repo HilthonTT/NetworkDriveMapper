@@ -28,10 +28,10 @@ Search for specific drives using the search bar at the top of the interface.
 Connect/disconnect each drive individually or connect/disconnect all drives at once.
 Delete or update a drive mapping as needed.
 Credits
-Network Drive Mapper was created by [Your Name Here].
+Network Drive Mapper was created by Hilthon.
 
 License
-Network Drive Mapper is licensed under the MIT License. See LICENSE for more information.
+Network Drive Mapper is licensed under the GPL License. See LICENSE for more information.
 
 Contributing
 To contribute to Network Drive Mapper, follow these steps:
