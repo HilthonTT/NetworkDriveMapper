@@ -1,6 +1,4 @@
-﻿using Microsoft.Win32;
-using NetworkDriveMapper.Helpers;
-using System.Reflection;
+﻿using NetworkDriveMapper.Helpers;
 
 namespace NetworkDriveMapper.ViewModels;
 
