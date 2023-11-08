@@ -1,3 +1,9 @@
+
+DriveLinker
+
+DriveLinker is the new successor of NetworkDriveMapper with more features and a better user interface.
+https://github.com/HilthonTT/DriveLinker
+
 Network Drive Mapper
 Network Drive Mapper is an app that allows you to map each network drive in Windows and store it in a SQLite-pcl-net core. The mapping is encrypted with AES encryption methods to ensure the security of your data. You can connect/disconnect each drive individually or connect/disconnect them all at once, add new drives, view drive information, delete and update the drive mappings, and search for specific drives as needed. The app uses net use command to map network drives in Windows and is made with .NET Maui.
 
